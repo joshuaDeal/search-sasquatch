@@ -1,6 +1,9 @@
 # spaghetti-search
 An internet search engine written mostly in python.
 
+## init.sh
+Initializes a database for storing webpages and the metadata collected from them. Also, creates a user account for managing that database.
+
 ## crawler.py
 Webcrawler. Crawls the internet for new urls and outputs its findings to a file called 'raw-urls.txt'.
 
