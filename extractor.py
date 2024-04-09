@@ -25,6 +25,7 @@ def getUrl(fileName, lineNumber):
 		print(f"File '{fileName}' not found")
 		return 0
 
+# TODO: Refactor this into several new functions. Each for getting a specific type of metadata.
 # Gets relevant metadata from a given url. Returns a dict.
 def getMeta(url):
 	metaData = {'url':url}
