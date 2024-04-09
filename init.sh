@@ -13,6 +13,7 @@ checkError(){
 }
 
 printHelp(){
+	# TODO: Add help message.
 	echo "Put the help message here"
 }
 
@@ -65,7 +66,7 @@ main(){
 	mariadb -u $PRIVILEGED_USER -p$PRIVILEGED_USER_PASS -e "CREATE USER '$USERNAME'@'$HOST' IDENTIFIED BY '$PASSWORD';"
 	checkError
 	# TODO: Write user credentials to file that extractor.py can use.
-	# Consider security when doing this. Encrypt to file, make sure extractor can decrypt it.
+	# Consider security when doing this. Encrypt the file, make sure extractor can decrypt it.
 
 	# Set up user privileges
 	echo "Setting up $USERNAME's privileges..."
