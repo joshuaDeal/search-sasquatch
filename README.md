@@ -1,5 +1,5 @@
 # spaghetti-search
-A search engine written mostly in python.
+An internet search engine written mostly in python.
 
 ## crawler.py
 Webcrawler. Crawls the internet for new urls and outputs its findings to a file called 'raw-urls.txt'.
