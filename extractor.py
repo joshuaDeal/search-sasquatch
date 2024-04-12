@@ -142,6 +142,33 @@ def getMySqlCreds(fileName):
 		credentials['password'] = password
 	return credentials
 
+def updateDataBase(dataDict):
+	creds = getMySqlCreds('db_creds.txt')
+
+	connection = None
+
+	try:
+		# Create a connection to the MariaDB database
+		connection = mysql.connector.connect(host='localhost', unix_socket='/var/run/mysqld/mysqld.sock', database='spaghetti_index', user=creds['username'], password=creds['password'])
+		
+		cursor = connection.cursor()
+
+		# Iterate over the dataDict dictionary and update the database
+		# TODO: Write logic that works with our actual database. This logic is just a place holder.
+		for key, value in dataDict.items():
+			query = "UPDATE sites SET column_name = %s WHERE key_column = %s"
+			cursor.execute(query, (value, key))
+
+		# Commit the changes to the database
+		connection.commit()  
+	
+	except mysql.connector.Error as error:
+		print("Error updating the database: {}".format(error))
+		
+	finally:
+		if connection is not None and connection.is_connected():
+			cursor.close()
+			connection.close()
 
 def main():
 	urlsFile = "raw-urls.txt"
@@ -155,6 +182,7 @@ def main():
 		meta = getMeta(url)
 		if meta != None:
 			updateCsv("index.csv",meta)
+			#updateDataBase(meta)
 			print("Added",url,"to csv")
 		i = i + 1
 
