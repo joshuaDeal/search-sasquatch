@@ -6,6 +6,7 @@ import requests
 import csv
 import shutil
 import os
+import mysql.connector
 from bs4 import BeautifulSoup
 from crawler import getHtml
 
@@ -130,6 +131,17 @@ def updateCsv(fileName, dataDict):
 		else:
 			# Add new entry.
 			writer.writerow(dataDict)
+
+# Read MySQL username and password from a file
+def getMySqlCreds(fileName):
+	credentials = {}
+	with open(fileName, 'r') as file:
+		line = file.readline().strip()
+		username, password = line.split(':')
+		credentials['username'] = username
+		credentials['password'] = password
+	return credentials
+
 
 def main():
 	urlsFile = "raw-urls.txt"
