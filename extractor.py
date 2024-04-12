@@ -182,8 +182,8 @@ def main():
 		meta = getMeta(url)
 		if meta != None:
 			updateCsv("index.csv",meta)
-			#updateDataBase(meta)
 			print("Added",url,"to csv")
+			#updateDataBase(meta)
 		i = i + 1
 
 if __name__ == "__main__":
