@@ -25,6 +25,16 @@ def getUrl(fileName, lineNumber):
 		print(f"File '{fileName}' not found")
 		return 0
 
+# Get the page title.
+def parseTitle(htmlSoup):
+	titleTag = htmlSoup.title
+	if titleTag:
+		#metaData['title'] = titleTag.string
+		return titleTag.string
+	else:
+		print("Title tag not found.")
+		return "Untitled Page"
+
 # TODO: Refactor this into several new functions. Each for getting a specific type of metadata.
 # Gets relevant metadata from a given url. Returns a dict.
 def getMeta(url,htmlContent):
@@ -35,12 +45,7 @@ def getMeta(url,htmlContent):
 		soup = BeautifulSoup(htmlContent, 'html.parser')
 
 		# Get the page title.
-		titleTag = soup.title
-		if titleTag:
-			metaData['title'] = titleTag.string
-		else:
-			print("Title tag not found.")
-			metaData['title'] = "Untitled Page"
+		metaData['title'] = parseTitle(soup)
 
 		# Get meta description.
 		description = soup.find('meta', attrs={'name': 'description'})
