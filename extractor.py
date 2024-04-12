@@ -27,11 +27,8 @@ def getUrl(fileName, lineNumber):
 
 # TODO: Refactor this into several new functions. Each for getting a specific type of metadata.
 # Gets relevant metadata from a given url. Returns a dict.
-def getMeta(url):
+def getMeta(url,htmlContent):
 	metaData = {'url':url}
-
-	# Get the html content from the url.
-	htmlContent = getHtml(url)
 
 	if htmlContent != None:
 		# Parse html content with BeautifulSoup.
@@ -123,7 +120,7 @@ def main():
 		if url == 0:
 			break
 		print("Parsing " + url + "...")
-		meta = getMeta(url)
+		meta = getMeta(url,getHtml(url))
 		if meta != None:
 			updateCsv("index.csv",meta)
 			print("Added",url,"to csv")
