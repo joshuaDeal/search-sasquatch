@@ -54,6 +54,28 @@ def parseKeywords(htmlSoup):
 		print("Meta keywords not found.")
 		return ""
 
+# TODO: Find better way to format this content.
+# Get headers.
+def parseHeaders(htmlSoup):
+	headers = htmlSoup.find_all(['h1','h2','h3','h4','h5','h6'])
+	if headers:
+		headersText = []
+		for i in range(len(headers) - 1):
+			text = ''
+			current = headers[i]
+			next_sibling = current.find_next_sibling()
+			while current != headers[i + 1]:
+				if current == next_sibling:
+					text += current.text
+				current = current.find_next()
+			headersText.append(text)
+
+		return str(headersText)
+	else:
+		print("Headers not found")
+		return ""
+
+
 # TODO: Refactor this into several new functions. Each for getting a specific type of metadata.
 # Gets relevant metadata from a given url. Returns a dict.
 def getMeta(url,htmlContent):
@@ -72,24 +94,8 @@ def getMeta(url,htmlContent):
 		# Get meta keywords.
 		metaData['keywords'] = parseKeywords(soup)
 
-		# Get headers.
-		#headers = soup.find_all(['h1','h2','h3','h4','h5','h6'])
-		#if headers:
-		#	headersText = []
-		#	for i in range(len(headers) - 1):
-		#		text = ''
-		#		current = headers[i]
-		#		next_sibling = current.find_next_sibling()
-		#		while current != headers[i + 1]:
-		#			if current == next_sibling:
-		#				text += current.text
-		#			current = current.find_next()
-		#		headersText.append(text)
-
-		#	metaData['headers'] = str(headersText)
-		#else:
-		#	print("Headers not found")
-		#	metaData['headers'] = ""
+		# Get headers
+		#metaData['headers'] = parseHeaders(soup)
 
 		return metaData
 	return None
