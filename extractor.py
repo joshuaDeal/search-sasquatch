@@ -44,7 +44,15 @@ def parseDescription(htmlSoup):
 	else:
 		print("Meta description not found.")
 		return "No description provided."
-	
+
+# Get meta keywords.
+def parseKeywords(htmlSoup):
+	keyWords = htmlSoup.find('meta', attrs={'name': 'keywords'})
+	if keyWords:
+		return keyWords['content']
+	else:
+		print("Meta keywords not found.")
+		return ""
 
 # TODO: Refactor this into several new functions. Each for getting a specific type of metadata.
 # Gets relevant metadata from a given url. Returns a dict.
@@ -62,12 +70,7 @@ def getMeta(url,htmlContent):
 		metaData['description'] = parseDescription(soup)
 
 		# Get meta keywords.
-		keyWords = soup.find('meta', attrs={'name': 'keywords'})
-		if keyWords:
-			metaData['keywords'] = keyWords['content']
-		else:
-			print("Meta keywords not found.")
-			metaData['keywords'] = ""
+		metaData['keywords'] = parseKeywords(soup)
 
 		# Get headers.
 		#headers = soup.find_all(['h1','h2','h3','h4','h5','h6'])
