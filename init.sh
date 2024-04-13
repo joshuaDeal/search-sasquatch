@@ -17,8 +17,8 @@ checkError(){
 printHelp(){
 	echo "$0"
 	echo "Usage:  $0 --[option]"
-	echo "--help			Display this help message."
-	echo "--user <username>	Specify privileged user to initially use when configuring the database."
+	echo "	--help			Display this help message."
+	echo "	--user <username>	Specify privileged user to initially use when configuring the database."
 }
 
 # Evaluate command line arguments
