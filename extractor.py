@@ -142,29 +142,54 @@ def getMySqlCreds(fileName):
 		credentials['password'] = password
 	return credentials
 
+#def updateDataBase(dataDict):
+#	creds = getMySqlCreds('db_creds.txt')
+#
+#	connection = None
+#
+#	try:
+#		# Create a connection to the MariaDB database
+#		connection = mysql.connector.connect(host='localhost', unix_socket='/var/run/mysqld/mysqld.sock', database='spaghetti_index', user=creds['username'], password=creds['password'])
+#		
+#		cursor = connection.cursor()
+#
+#		# Iterate over the dataDict dictionary and update the database
+#		# TODO: Write logic that works with our actual database. This logic is just a place holder.
+#		for key, value in dataDict.items():
+#			query = "UPDATE sites SET key = %s WHERE key = %s"
+#			cursor.execute(query, (value, key))
+#
+#		# Commit the changes to the database
+#		connection.commit()  
+#	
+#	except mysql.connector.Error as error:
+#		print("Error updating the database: {}".format(error))
+#		
+#	finally:
+#		if connection is not None and connection.is_connected():
+#			cursor.close()
+#			connection.close()
+
 def updateDataBase(dataDict):
 	creds = getMySqlCreds('db_creds.txt')
-
+	
 	connection = None
 
 	try:
 		# Create a connection to the MariaDB database
 		connection = mysql.connector.connect(host='localhost', unix_socket='/var/run/mysqld/mysqld.sock', database='spaghetti_index', user=creds['username'], password=creds['password'])
-		
+
 		cursor = connection.cursor()
 
-		# Iterate over the dataDict dictionary and update the database
-		# TODO: Write logic that works with our actual database. This logic is just a place holder.
-		for key, value in dataDict.items():
-			query = "UPDATE sites SET column_name = %s WHERE key_column = %s"
-			cursor.execute(query, (value, key))
-
+		# Update the database with the data from dataDict
+		query = "INSERT INTO sites (url, title, description, keywords) VALUES (%s, %s, %s, %s) ON DUPLICATE KEY UPDATE url = VALUES(url), title = VALUES(title), description = VALUES(description), keywords = VALUES(keywords)"
+		cursor.execute(query, (str(dataDict['url']), str(dataDict['title']), str(dataDict['description']), str(dataDict['keywords'])))
 		# Commit the changes to the database
-		connection.commit()  
-	
+		connection.commit()
+
 	except mysql.connector.Error as error:
 		print("Error updating the database: {}".format(error))
-		
+
 	finally:
 		if connection is not None and connection.is_connected():
 			cursor.close()
@@ -181,9 +206,9 @@ def main():
 		print("Parsing " + url + "...")
 		meta = getMeta(url)
 		if meta != None:
-			updateCsv("index.csv",meta)
-			print("Added",url,"to csv")
-			#updateDataBase(meta)
+			#updateCsv("index.csv",meta)
+			#print("Added",url,"to csv")
+			updateDataBase(meta)
 		i = i + 1
 
 if __name__ == "__main__":
