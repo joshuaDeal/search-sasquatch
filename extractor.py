@@ -88,13 +88,22 @@ def getMeta(url):
 		soup = BeautifulSoup(htmlContent, 'html.parser')
 
 		# Get the page title.
-		metaData['title'] = parseTitle(soup)
+		title = parseTitle(soup)
+		if len(title) > 50:
+			title = title[:50]
+		metaData['title'] = title
 
 		# Get meta description.
-		metaData['description'] = parseDescription(soup)
+		description = parseDescription(soup)
+		if len(description) > 150:
+			description = description[:150]
+		metaData['description'] = description
 
 		# Get meta keywords.
-		metaData['keywords'] = parseKeywords(soup)
+		keywords = parseKeywords(soup)
+		if len(keywords) > 50:
+			keywords = keywords[:50]
+		metaData['keywords'] = keywords
 
 		# Get headers
 		#metaData['headers'] = parseHeaders(soup)
