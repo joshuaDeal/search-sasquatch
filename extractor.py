@@ -160,7 +160,7 @@ def updateDataBase(dataDict):
 		connection.commit()
 
 	except mysql.connector.Error as error:
-		print("Error updating the database: {}".format(error))
+		print("Error updating the database for url '{}': {}".format(dataDict['url'],error))
 
 	finally:
 		if connection is not None and connection.is_connected():
