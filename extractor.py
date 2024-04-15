@@ -111,36 +111,6 @@ def getMeta(url):
 		return metaData
 	return None
 
-# Check if given url is already in the csv.
-def checkCsv(fileName, url):
-	with open(fileName, 'r', newline='') as file:
-		reader = csv.DictReader(file)
-		for row in reader:
-			if 'url' in row and row['url'] == url:
-				return True
-	return False
-
-# Create or update a csv file
-def updateCsv(fileName, dataDict):
-	# Define feildnames
-	fieldNames = list(dataDict.keys())
-
-	with open(fileName, 'a+', newline='') as file:
-		writer = csv.DictWriter(file, fieldnames=fieldNames)
-
-		# If the file is empty, we will create the header row.
-		if file.tell() == 0:
-			writer.writeheader()
-
-		# Determine if to update an entry in the csv or if to add a new entry.
-		if checkCsv(fileName,dataDict['url']):
-			# TODO: Update entry.
-			# Do note that I'm going to swich to using a database of some sort and the use of csv is just a placeholder.
-			print("Preexisting entry found. Not updated because update logic is yet to be written.")
-		else:
-			# Add new entry.
-			writer.writerow(dataDict)
-
 # Read MySQL username and password from a file
 def getMySqlCreds(fileName):
 	credentials = {}
@@ -187,8 +157,6 @@ def main():
 		print("Parsing " + url + "...")
 		meta = getMeta(url)
 		if meta != None:
-			#updateCsv("index.csv",meta)
-			#print("Added",url,"to csv")
 			updateDataBase(meta)
 		i = i + 1
 
