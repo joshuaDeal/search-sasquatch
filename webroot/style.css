@@ -12,6 +12,13 @@ pre {
 	font-size: 15px;
 }
 
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+}
+
 header pre {
 	color: #008888;
 }
