@@ -6,9 +6,21 @@ import requests
 import csv
 import shutil
 import os
+import sys
+import subprocess
 import mysql.connector
 from bs4 import BeautifulSoup
 from crawler import getHtml
+
+def evalArguments():
+	output = {}
+
+	for i in range(len(sys.argv)):
+		# Let user specify key file for database login
+		if sys.argv[i] == "--key" or sys.argv[i] == "-k":
+			output['keyFile'] = sys.argv[i+1]
+
+	return output
 
 # Get a url from the url file.
 def getUrl(fileName, lineNumber):
@@ -112,18 +124,24 @@ def getMeta(url):
 	return None
 
 # Read MySQL username and password from a file
-def getMySqlCreds(fileName):
+def getMySqlCreds(fileName,keyFile):
 	credentials = {}
-	with open(fileName, 'r') as file:
-		line = file.readline().strip()
-		username, password = line.split(':')
+
+	# Construct gpg command for decryption
+	gpgCommand = ['gpg','--decrypt','--batch','--passphrase-file',keyFile,fileName]
+
+	# Try and decrypt the creds file
+	try:
+		decryptedData = subprocess.check_output(gpgCommand).decode('utf-8').strip()
+		username, password = decryptedData.split(':')
 		credentials['username'] = username
 		credentials['password'] = password
-	return credentials
+		return credentials
+	except subprocess.CalledProcessError as e:
+		print(f"Error decrypting file: {e}")
+		return None
 
-def updateDataBase(dataDict):
-	creds = getMySqlCreds('db_creds.txt')
-	
+def updateDataBase(dataDict,creds):
 	connection = None
 
 	try:
@@ -148,6 +166,7 @@ def updateDataBase(dataDict):
 
 def main():
 	urlsFile = "raw-urls.txt"
+	arguments = evalArguments()
 
 	i = 0
 	while True:
@@ -157,7 +176,7 @@ def main():
 		print("Parsing " + url + "...")
 		meta = getMeta(url)
 		if meta != None:
-			updateDataBase(meta)
+			updateDataBase(meta,getMySqlCreds('db_creds.gpg',arguments['keyFile']))
 		i = i + 1
 
 if __name__ == "__main__":
