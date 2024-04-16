@@ -1,36 +1,40 @@
 body {
 	text-align: center;
-	background: linear-gradient(#fed6af, #ffffee) fixed;
-	color: #880000;
+	background: linear-gradient(#1a1a1a, #333333) fixed;
+	color: #cccccc;
 }
 
 h1 {
 	font-size: 50px;
+	color: #ff6600;
 }
 
 pre {
 	font-size: 15px;
+	color: #66cccc;
 }
 
 header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 60vh;
 }
 
 header pre {
-	color: #008888;
+	color: #ffff99;
 }
 
 input, button {
 	font-size: 14px;
-	background: #f0e0d6;
-	color: #880000;
+	background: #333333;
+	color: #cccccc;
+	border: 1px solid #ff6600;
 }
 
 button:hover {
-	background: #ffa366;
+	background: #ff6600;
+	color: #333333;
 }
 
 form {
@@ -39,15 +43,15 @@ form {
 }
 
 a {
-	color: #008888;
+	color: #66cccc;
 }
 
 a:visited {
-	color: #880000;
+	color: #ff6600;
 }
 
 a:hover {
-	color: #ffa366;
+	color: #ffff99;
 }
 
 ul {
