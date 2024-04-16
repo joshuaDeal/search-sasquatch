@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # A meta data extractor for html pages. Designed to extract meta data from each entry in a text file that contains a list of urls seperated by newlines.
+# TODO: Make sure that the handling of sql is safe.
 
 import requests
 import csv
