@@ -9,3 +9,6 @@ Webcrawler. Crawls the internet for new urls and outputs its findings to a file 
 
 ## extractor.py
 Meta data extractor / web scraper. Extracts meta data from html and stores it in a Mariadb database. Uses the 'raw-urls.txt' file as input.
+
+## webroot/
+Directory containing source files for website user interface / front end.
