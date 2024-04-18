@@ -24,14 +24,37 @@ header {
 
 header pre {
 	color: #ffff99;
+	text-shadow: 0 0 20px #f1f1f1;
 	font-size: 21px;
+}
+
+header pre:hover {
+	animation: headerColor 20s infinite;
+}
+
+@keyframes headerColor {
+  0% { color: #ffff99; }
+  10% { color: purple; }
+  20% { color: red; }
+  30% { color: yellow; }
+  40% { color: blue; }
+  50% { color: green; }
+  60% { color: orange; }
+  70% { color: magenta; }
+  80% { color: teal; }
+  90% { color: pink; }
+  100% { color: #ffff99; }
+}
+
+input[type="search"] {
+	width: 500px;
 }
 
 input, button {
 	font-size: 14px;
 	background: #444444;
 	color: #cccccc;
-	border: 1px solid #ff6600;
+	border: none;
 	padding: 5px 10px;
 	margin: 5px;
 }
