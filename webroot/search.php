@@ -46,11 +46,34 @@ function printResult($username, $password, $searchSting, $resultNumber) {
 	$servername = "localhost";
 	$dbname = "spaghetti_index";
 
+	echo $servername . " " . $username . " " . $password . " " . $dbname . "\n";
+
+	// Create database connection
+	$conn = mysqli_connect($servername,$username,$password,$dbname);
+
+	// Check the connection
+	if (!$conn) {
+		die("Connection failed" . mysqli_connect_error());
+	}
+
+	// Preform query
+	$sql = "SELECT * FROM sites LIMIT 1";
+	$result = mysqli_query($conn, $sql);
+
+	// Parse data from result
+	$url = mysqli_fetch_assoc($result)['url'];
+
 	// Display the results
 	echo "<div id=\"result\">\n";
-	echo "	<a href=\"http://example.com\"><h4>This is result number " . $resultNumber . "</h4></a>\n";
+	echo "	<a href=\"$url\"><h4>This is result number " . $resultNumber . "</h4></a>\n";
 	echo "	<p>The description will go right here!</p>\n";
 	echo "</div>\n";
+
+	// Free result set
+	mysqli_free_result($result);
+
+	// Close database connection
+	mysqli_close($conn);
 }
 
 function main() {
@@ -68,8 +91,10 @@ function main() {
 	}
 }
 
-main();
-#$foo = getMySqlCreds("../db_creds.gpg","../decryption_key.txt");
-#echo $foo["username"] . ":" . $foo["password"] . "\n";
+#main();
+$creds = getMySqlCreds("db_creds.gpg", "decryption_key.txt");
+#$searchString = "Test search";
+#printResult($creds["username"], $creds["password"], $searchString,1);
+echo $creds["username"] . "\n";
 
 ?>
