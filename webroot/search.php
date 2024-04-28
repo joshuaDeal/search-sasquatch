@@ -35,6 +35,8 @@ function printSite($searchString) {
 	echo "	<body>\n";
 	echo "		<p>You have searched for \"" . $searchString . "\".</p>\n";
 	printResult($searchString,1);
+	printResult($searchString,2);
+	printResult($searchString,3);
 	echo "	</body>\n";
 	echo "</html>\n";
 }
