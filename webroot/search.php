@@ -21,7 +21,7 @@ function getMySqlCreds($fileName, $keyFile) {
 	}
 }
 
-function printSite($searchString) {
+function printSite($searchString, $creds) {
 	echo "<!DOCTYPE html>\n";
 	echo "<html lang=\"en\">\n";
 	echo "	<head>\n";
@@ -34,14 +34,19 @@ function printSite($searchString) {
 	echo "	</head>\n";
 	echo "	<body>\n";
 	echo "		<p>You have searched for \"" . $searchString . "\".</p>\n";
-	printResult($searchString,1);
+	printResult($creds["username"], $creds["password"], $searchString,1);
 	printResult($searchString,2);
 	printResult($searchString,3);
 	echo "	</body>\n";
 	echo "</html>\n";
 }
 
-function printResult($searchSting, $resultNumber) {
+function printResult($username, $password, $searchSting, $resultNumber) {
+	// Get information from database
+	$servername = "localhost";
+	$dbname = "spaghetti_index";
+
+	// Display the results
 	echo "<div id=\"result\">\n";
 	echo "	<a href=\"http://example.com\"><h4>This is result number " . $resultNumber . "</h4></a>\n";
 	echo "	<p>The description will go right here!</p>\n";
@@ -49,6 +54,7 @@ function printResult($searchSting, $resultNumber) {
 }
 
 function main() {
+	// Make sure we have received a post request.
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$searchString = filter_var($_POST["q"], FILTER_SANITIZE_STRING);
 
@@ -57,7 +63,8 @@ function main() {
 			exit;
 		}
 
-		printSite($searchString);
+		$creds = getMySqlCreds("../db_creds.gpg", "../decryption_key.txt");
+		printSite($searchString, $creds);
 	}
 }
 
