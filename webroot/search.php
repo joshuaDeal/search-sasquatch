@@ -48,8 +48,6 @@ function printResult($username, $password, $searchSting, $resultNumber) {
 	$servername = "localhost";
 	$dbname = "spaghetti_index";
 
-	//echo $servername . " " . $username . " " . $password . " " . $dbname . "\n";
-
 	// Create database connection
 	$conn = mysqli_connect($servername,$username,$password,$dbname);
 
