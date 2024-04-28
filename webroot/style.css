@@ -92,3 +92,12 @@ ul {
 	list-style-type: none;
 	column-count: 3;
 }
+
+#result {
+	background: #333333;
+	border: 1px solid #cccccc;
+	color: #cccccc;
+	padding: 10px;
+	margin: 10px;
+	text-align: left;
+}

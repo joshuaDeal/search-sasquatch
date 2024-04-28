@@ -34,8 +34,16 @@ function printSite($searchString) {
 	echo "	</head>\n";
 	echo "	<body>\n";
 	echo "		<p>You have searched for \"" . $searchString . "\".</p>\n";
+	printResult($searchString,1);
 	echo "	</body>\n";
 	echo "</html>\n";
+}
+
+function printResult($searchSting, $resultNumber) {
+	echo "<div id=\"result\">\n";
+	echo "	<a href=\"http://example.com\"><h4>This is result number " . $resultNumber . "</h4></a>\n";
+	echo "	<p>The description will go right here!</p>\n";
+	echo "</div>\n";
 }
 
 function main() {
