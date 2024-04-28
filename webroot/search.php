@@ -43,7 +43,7 @@ function printSite($searchString, $creds) {
 	echo "</html>\n";
 }
 
-function printResult($username, $password, $searchSting, $resultNumber) {
+function printResult($username, $password, $searchString, $resultNumber) {
 	// Get information from database
 	$servername = "localhost";
 	$dbname = "spaghetti_index";
@@ -57,7 +57,7 @@ function printResult($username, $password, $searchSting, $resultNumber) {
 	}
 
 	// Preform query
-	$sql = "SELECT * FROM sites LIMIT 1";
+	$sql = "SELECT * FROM sites WHERE title LIKE '%$searchString%' LIMIT 1";
 	$result = mysqli_query($conn, $sql);
 
 	// Parse data from result
