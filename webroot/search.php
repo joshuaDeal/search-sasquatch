@@ -35,8 +35,8 @@ function printSite($searchString, $creds) {
 	echo "	<body>\n";
 	echo "		<p>You have searched for \"" . $searchString . "\".</p>\n";
 	printResult($creds["username"], $creds["password"], $searchString,1);
-	printResult($searchString,2);
-	printResult($searchString,3);
+	printResult($creds["username"], $creds["password"], $searchString,2);
+	printResult($creds["username"], $creds["password"], $searchString,3);
 	echo "	</body>\n";
 	echo "</html>\n";
 }
