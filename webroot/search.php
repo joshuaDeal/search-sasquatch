@@ -1,11 +1,13 @@
 <?php
 
+// TODO: Make this program work with gpg! Don't hardcode mysql log in credentials!
+
 // Read MySql username and password from a file.
 function getMySqlCreds($fileName, $keyFile) {
 	$credentials = array();
 
 	// Construct gpg command for decryption
-	$gpgCommand = "gpg --decrypt --batch --passphrase-file $keyFile $fileName";
+	$gpgCommand = "sudo gpg --decrypt --batch --passphrase-file $keyFile $fileName";
 
 	// Try and decrypt the creds file
 	exec($gpgCommand, $output, $returnCode);
@@ -46,7 +48,7 @@ function printResult($username, $password, $searchSting, $resultNumber) {
 	$servername = "localhost";
 	$dbname = "spaghetti_index";
 
-	echo $servername . " " . $username . " " . $password . " " . $dbname . "\n";
+	//echo $servername . " " . $username . " " . $password . " " . $dbname . "\n";
 
 	// Create database connection
 	$conn = mysqli_connect($servername,$username,$password,$dbname);
@@ -61,12 +63,15 @@ function printResult($username, $password, $searchSting, $resultNumber) {
 	$result = mysqli_query($conn, $sql);
 
 	// Parse data from result
-	$url = mysqli_fetch_assoc($result)['url'];
+	$data = mysqli_fetch_assoc($result);
+	$title = $data['title'];
+	$url = $data['url'];
+	$description = $data['description'];
 
 	// Display the results
 	echo "<div id=\"result\">\n";
-	echo "	<a href=\"$url\"><h4>This is result number " . $resultNumber . "</h4></a>\n";
-	echo "	<p>The description will go right here!</p>\n";
+	echo "	<a href=\"$url\"><h4>$title</h4></a>\n";
+	echo "	<p>$description</p>\n";
 	echo "</div>\n";
 
 	// Free result set
@@ -86,15 +91,12 @@ function main() {
 			exit;
 		}
 
-		$creds = getMySqlCreds("../db_creds.gpg", "../decryption_key.txt");
+		//$creds = getMySqlCreds("../db_creds.gpg", "../decryption_key.txt");
+		$creds = array("username" => "spaghetti-search", "password" => "password");
 		printSite($searchString, $creds);
 	}
 }
 
-#main();
-$creds = getMySqlCreds("db_creds.gpg", "decryption_key.txt");
-#$searchString = "Test search";
-#printResult($creds["username"], $creds["password"], $searchString,1);
-echo $creds["username"] . "\n";
+main();
 
 ?>
