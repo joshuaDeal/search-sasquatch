@@ -44,11 +44,12 @@ function printSite($searchString, $creds) {
 }
 
 // Create html for a result.
-function printResult($url,$title,$description) {
+function printResult($url,$title,$description,$date) {
 	// Display the results
 	echo "<div id=\"result\">\n";
 	echo "	<a href=\"$url\"><h4>$title</h4></a>\n";
 	echo "	<p>$description</p>\n";
+	echo "	<p>last visited: $date</p>\n";
 	echo "</div>\n";
 }
 
@@ -75,9 +76,10 @@ function getResults($username, $password, $searchString, $resultNumber) {
 	$title = $data['title'];
 	$url = $data['url'];
 	$description = $data['description'];
+	$date = $data['last_visited'];
 
 	//Display Result
-	printResult($url,$title,$description);
+	printResult($url,$title,$description,$date);
 
 	// Free result set
 	mysqli_free_result($result);
