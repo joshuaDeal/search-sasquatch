@@ -36,9 +36,8 @@ function printSite($searchString, $creds) {
 	echo "	</head>\n";
 	echo "	<body>\n";
 	echo "		<p>You have searched for \"" . $searchString . "\".</p>\n";
-	getResults($creds["username"], $creds["password"], $searchString,1);
-	getResults($creds["username"], $creds["password"], $searchString,2);
-	getResults($creds["username"], $creds["password"], $searchString,3);
+	$results = getResults($creds["username"], $creds["password"], $searchString,1);
+	printResult($results['url'],$results['title'],$results['description'],$results['date']);
 	echo "	</body>\n";
 	echo "</html>\n";
 }
@@ -54,8 +53,10 @@ function printResult($url,$title,$description,$date) {
 	echo "</div>\n";
 }
 
-// Search function. Gets database creds and search query as input. TODO: Should return a data structure containing all its findings.
+// Search function. Gets database creds and search query as input.
 function getResults($username, $password, $searchString, $resultNumber) {
+	$output = array();
+
 	// Get information from database
 	$servername = "localhost";
 	$dbname = "spaghetti_index";
@@ -74,19 +75,22 @@ function getResults($username, $password, $searchString, $resultNumber) {
 
 	// Parse data from result
 	$data = mysqli_fetch_assoc($result);
-	$title = $data['title'];
-	$url = $data['url'];
-	$description = $data['description'];
-	$date = $data['last_visited'];
+	$output['title'] = $data['title'];
+	$output['url'] = $data['url'];
+	$output['description'] = $data['description'];
+	$output['date'] = $data['last_visited'];
 
 	//Display Result
-	printResult($url,$title,$description,$date);
+	//printResult($url,$title,$description,$date);
 
 	// Free result set
 	mysqli_free_result($result);
 
 	// Close database connection
 	mysqli_close($conn);
+
+	// Output our findings
+	return $output;
 }
 
 function main() {
