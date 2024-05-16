@@ -101,3 +101,8 @@ ul {
 	margin: 10px;
 	text-align: left;
 }
+
+#result-url {
+	color: red;
+	font-style: italic;
+}
