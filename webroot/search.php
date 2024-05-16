@@ -48,6 +48,7 @@ function printResult($url,$title,$description,$date) {
 	// Display the results
 	echo "<div id=\"result\">\n";
 	echo "	<a href=\"$url\"><h4>$title</h4></a>\n";
+	echo "	<p>$url</p>\n";
 	echo "	<p>$description</p>\n";
 	echo "	<p>last visited: $date</p>\n";
 	echo "</div>\n";
