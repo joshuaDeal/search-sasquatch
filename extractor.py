@@ -95,7 +95,6 @@ def parseLists(htmlSoup):
 		text = item.get_text()
 		listsText += text + ' '
 
-	print("Lists:", listsText.strip())
 	return listsText.strip()
 
 # Gets relevant metadata from a given url. Returns a dict.
