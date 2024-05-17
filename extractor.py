@@ -106,7 +106,10 @@ def getMeta(url):
 		metaData['keywords'] = keywords
 
 		# Get headers
-		metaData['headers'] = parseHeaders(soup)
+		headers = parseHeaders(soup)
+		if len(headers) > 150:
+			headers = headers[:150]
+		metaData['headers'] = headers
 
 		return metaData
 	return None
