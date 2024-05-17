@@ -4,8 +4,6 @@
 # TODO: Make sure that the handling of sql is safe.
 
 import requests
-import shutil
-import os
 import sys
 import subprocess
 import mysql.connector
