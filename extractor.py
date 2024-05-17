@@ -159,8 +159,8 @@ def updateDataBase(dataDict,creds):
 		cursor = connection.cursor()
 
 		# Update the database with the data from dataDict
-		query = "INSERT INTO sites (url, title, description, keywords, headers) VALUES (%s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE url = VALUES(url), title = VALUES(title), description = VALUES(description), keywords = VALUES(keywords), headers = VALUES(headers)"
-		cursor.execute(query, (str(dataDict['url']), str(dataDict['title']), str(dataDict['description']), str(dataDict['keywords']), str(dataDict['headers'])))
+		query = "INSERT INTO sites (url, title, description, keywords, headers, paragraphs) VALUES (%s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE url = VALUES(url), title = VALUES(title), description = VALUES(description), keywords = VALUES(keywords), headers = VALUES(headers), paragraphs = VALUES(paragraphs)"
+		cursor.execute(query, (str(dataDict['url']), str(dataDict['title']), str(dataDict['description']), str(dataDict['keywords']), str(dataDict['headers']), str(dataDict['paragraphs'])))
 		# Commit the changes to the database
 		connection.commit()
 
