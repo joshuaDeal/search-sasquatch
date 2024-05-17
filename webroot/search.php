@@ -47,19 +47,23 @@ function printSite($searchString, $creds) {
 	// Start of results
 	$results = getResults($creds["username"], $creds["password"], $searchString,1);
 	for ($i = 0; $i < count($results); $i++) {
-		printResult($results[$i]['url'],$results[$i]['title'],$results[$i]['description'],$results[$i]['date']);
+		printResult($results[$i]['url'],$results[$i]['title'],$results[$i]['description'],$results[$i]['date'],$results[$i]['paragraphs']);
 	}
 	echo "	</body>\n";
 	echo "</html>\n";
 }
 
 // Create html for a result.
-function printResult($url,$title,$description,$date) {
+function printResult($url,$title,$description,$date,$paragraphs) {
 	// Display the results
 	echo "<div id=\"result\">\n";
 	echo "	<a href=\"$url\"><h4>$title</h4></a>\n";
 	echo "	<p id=\"result-url\">$url</p>\n";
-	echo "	<p>$description</p>\n";
+	if ($description == "No description provided.") {
+		echo "	<p>$paragraphs</p>\n";
+	} else {
+		echo "	<p>$description</p>\n";
+	}
 	echo "	<p>last visited: $date</p>\n";
 	echo "</div>\n";
 }
@@ -86,7 +90,7 @@ function getResults($username, $password, $searchString, $resultNumber) {
 
 	// Parse data from result
 	while ($row = mysqli_fetch_assoc($result)) {
-		$output[] = array('title' => $row['title'], 'url' => $row['url'], 'description' => $row['description'], 'date' => $row['last_visited']);
+		$output[] = array('title' => $row['title'], 'url' => $row['url'], 'description' => $row['description'], 'date' => $row['last_visited'], 'paragraphs' => $row['paragraphs']);
 	}
 
 	// Free result set
