@@ -87,6 +87,17 @@ def parseParagraphs(htmlSoup):
 	print("Paragraphs:", pText.strip())
 	return pText.strip()
 
+# Get lists
+def parseLists(htmlSoup):
+	listsText = ''
+	lists = htmlSoup.find_all(['li','dt','dd'])
+
+	for item in lists:
+		text = item.get_text()
+		listsText += text + ' '
+
+	return listsText.strip()
+
 # Gets relevant metadata from a given url. Returns a dict.
 def getMeta(url):
 	metaData = {'url':url}
