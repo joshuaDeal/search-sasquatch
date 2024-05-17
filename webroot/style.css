@@ -95,10 +95,8 @@ ul {
 }
 
 header#search {
-	display: inline;
 	justify-content: left;
-	align-items: center;
-	height: 60vh;
+	height: 10vh;
 }
 
 #result {
