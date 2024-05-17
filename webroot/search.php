@@ -39,7 +39,7 @@ function printSite($searchString, $creds) {
 	echo "			<h1>Spaghetti Search</h1>\n";
 	echo "			<div>";
 	echo "				<form id=\"form\" action=\"./search.php\" method=\"post\">";
-	echo "					<input type=\"search\" name=\"q\" placeholder=\"$searchString\">";
+	echo "					<input type=\"search\" name=\"q\" value=\"$searchString\">";
 	echo "					<button>Search</button>";
 	echo "				</form>";
 	echo "			</div>";
