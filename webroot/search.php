@@ -85,12 +85,12 @@ function getResults($username, $password, $searchString, $resultNumber) {
 	}
 
 	// Preform query
-	$sql = "SELECT * FROM sites WHERE title LIKE '%$searchString%' OR description LIKE '%$searchString%' OR keywords LIKE '%$searchString%' OR headers LIKE '%$searchString%' OR paragraphs LIKE '%$searchString%'";
+	$sql = "SELECT * FROM sites WHERE title LIKE '%$searchString%' OR description LIKE '%$searchString%' OR keywords LIKE '%$searchString%' OR headers LIKE '%$searchString%' OR paragraphs LIKE '%$searchString%' OR lists like '%$searchString%'";
 	$result = mysqli_query($conn, $sql);
 
 	// Parse data from result
 	while ($row = mysqli_fetch_assoc($result)) {
-		$output[] = array('title' => $row['title'], 'url' => $row['url'], 'description' => $row['description'], 'date' => $row['last_visited'], 'paragraphs' => $row['paragraphs']);
+		$output[] = array('title' => $row['title'], 'url' => $row['url'], 'description' => $row['description'], 'date' => $row['last_visited'], 'paragraphs' => $row['paragraphs'], 'lists' => $row['lists']);
 	}
 
 	// Free result set
