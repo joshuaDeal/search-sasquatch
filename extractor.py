@@ -95,6 +95,7 @@ def parseLists(htmlSoup):
 		text = item.get_text()
 		listsText += text + ' '
 
+	print("Lists:", listsText.strip())
 	return listsText.strip()
 
 # Gets relevant metadata from a given url. Returns a dict.
@@ -138,6 +139,12 @@ def getMeta(url):
 			paragraphs = paragraphs[:255]
 		metaData['paragraphs'] = paragraphs
 
+		# Get lists
+		lists = parseLists(soup)
+		if len(lists) > 255:
+			lists = lists[:255]
+		metaData['lists'] = lists
+
 		return metaData
 	return None
 
@@ -169,8 +176,8 @@ def updateDataBase(dataDict,creds):
 		cursor = connection.cursor()
 
 		# Update the database with the data from dataDict
-		query = "INSERT INTO sites (url, title, description, keywords, headers, paragraphs) VALUES (%s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE url = VALUES(url), title = VALUES(title), description = VALUES(description), keywords = VALUES(keywords), headers = VALUES(headers), paragraphs = VALUES(paragraphs)"
-		cursor.execute(query, (str(dataDict['url']), str(dataDict['title']), str(dataDict['description']), str(dataDict['keywords']), str(dataDict['headers']), str(dataDict['paragraphs'])))
+		query = "INSERT INTO sites (url, title, description, keywords, headers, paragraphs, lists) VALUES (%s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE url = VALUES(url), title = VALUES(title), description = VALUES(description), keywords = VALUES(keywords), headers = VALUES(headers), paragraphs = VALUES(paragraphs), lists = VALUES(lists)"
+		cursor.execute(query, (str(dataDict['url']), str(dataDict['title']), str(dataDict['description']), str(dataDict['keywords']), str(dataDict['headers']), str(dataDict['paragraphs']), str(dataDict['lists'])))
 		# Commit the changes to the database
 		connection.commit()
 
