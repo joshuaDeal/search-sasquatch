@@ -84,7 +84,6 @@ def parseParagraphs(htmlSoup):
 		text = para.get_text()
 		pText += text + ' '
 
-	print("Paragraphs:", pText.strip())
 	return pText.strip()
 
 # Get lists
