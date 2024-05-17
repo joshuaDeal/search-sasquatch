@@ -35,7 +35,10 @@ function printSite($searchString, $creds) {
 	echo "		<meta name=\"viewport\" content=\"width=device-width, inital-scale=1\">\n";
 	echo "	</head>\n";
 	echo "	<body>\n";
-	echo "		<p>You have searched for \"" . $searchString . "\".</p>\n";
+	echo "		<header>\n";
+	echo "			<p>You have searched for \"" . $searchString . "\".</p>\n";
+	echo "		</header>\n";
+	// Start of results
 	$results = getResults($creds["username"], $creds["password"], $searchString,1);
 	for ($i = 0; $i < count($results); $i++) {
 		printResult($results[$i]['url'],$results[$i]['title'],$results[$i]['description'],$results[$i]['date']);
