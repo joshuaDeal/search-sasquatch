@@ -73,7 +73,6 @@ def parseHeaders(htmlSoup):
 		text = heading.get_text()
 		headingText += text + ' '
 
-	print("Heading Text: ",headingText.strip())
 	return headingText.strip()
 
 # Gets relevant metadata from a given url. Returns a dict.
