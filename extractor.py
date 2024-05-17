@@ -75,6 +75,18 @@ def parseHeaders(htmlSoup):
 
 	return headingText.strip()
 
+# Get paragraphs.
+def parseParagraphs(htmlSoup):
+	pText = ''
+	paras = htmlSoup.find_all(['p'])
+
+	for para in paras:
+		text = para.get_text()
+		pText += text + ' '
+
+	print("Paragraphs:", pText.strip())
+	return pText.strip()
+
 # Gets relevant metadata from a given url. Returns a dict.
 def getMeta(url):
 	metaData = {'url':url}
@@ -109,6 +121,12 @@ def getMeta(url):
 		if len(headers) > 150:
 			headers = headers[:150]
 		metaData['headers'] = headers
+
+		# Get paragraphs
+		paragraphs = parseParagraphs(soup)
+		if len(paragraphs) > 255:
+			paragraphs = paragraphs[:255]
+		metaData['paragraphs'] = paragraphs
 
 		return metaData
 	return None
