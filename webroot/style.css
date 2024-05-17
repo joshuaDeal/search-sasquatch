@@ -104,6 +104,10 @@ header#search h1 {
 	text-shadow: 0 0 20px #f1f1f1;
 }
 
+header#search h1:hover {
+	animation: headerColor 20s infinite;
+}
+
 #result {
 	background: #333333;
 	border: 1px solid #cccccc;
