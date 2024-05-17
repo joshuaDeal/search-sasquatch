@@ -35,8 +35,14 @@ function printSite($searchString, $creds) {
 	echo "		<meta name=\"viewport\" content=\"width=device-width, inital-scale=1\">\n";
 	echo "	</head>\n";
 	echo "	<body>\n";
-	echo "		<header>\n";
-	echo "			<p>You have searched for \"" . $searchString . "\".</p>\n";
+	echo "		<header id=\"search\">\n";
+	echo "			<h1>Spaghetti Search</h1>\n";
+	echo "			<div>";
+	echo "				<form id=\"form\" action=\"./search.php\" method=\"post\">";
+	echo "					<input type=\"search\" name=\"q\" placeholder=\"$searchString\">";
+	echo "					<button>Search</button>";
+	echo "				</form>";
+	echo "			</div>";
 	echo "		</header>\n";
 	// Start of results
 	$results = getResults($creds["username"], $creds["password"], $searchString,1);

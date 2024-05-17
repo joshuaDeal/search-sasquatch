@@ -93,6 +93,13 @@ ul {
 	column-count: 3;
 }
 
+header#search {
+	display: inline;
+	justify-content: left;
+	align-items: center;
+	height: 60vh;
+}
+
 #result {
 	background: #333333;
 	border: 1px solid #cccccc;
