@@ -7,6 +7,7 @@ import requests
 import sys
 import subprocess
 import mysql.connector
+import re
 from bs4 import BeautifulSoup
 from crawler import getHtml
 
@@ -68,23 +69,16 @@ def parseKeywords(htmlSoup):
 # TODO: Find better way to format this content.
 # Get headers.
 def parseHeaders(htmlSoup):
-	headers = htmlSoup.find_all(['h1','h2','h3','h4','h5','h6'])
-	if headers:
-		headersText = []
-		for i in range(len(headers) - 1):
-			text = ''
-			current = headers[i]
-			next_sibling = current.find_next_sibling()
-			while current != headers[i + 1]:
-				if current == next_sibling:
-					text += current.text
-				current = current.find_next()
-			headersText.append(text)
+	headingText = ''
+	headings = soup.find_all(['h1','h2','h3','h4','h4','h6'])
 
-		return str(headersText)
-	else:
-		print("Headers not found")
-		return ""
+	for heading in headings:
+		text = heading.get_text()
+		# Remove special characters
+		cleanText = re.sub(r'[\w\s]', '', text)
+		headingText += cleanText + ' '
+
+	return heading_text.strip()
 
 # Gets relevant metadata from a given url. Returns a dict.
 def getMeta(url):
