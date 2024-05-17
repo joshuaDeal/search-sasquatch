@@ -37,7 +37,9 @@ function printSite($searchString, $creds) {
 	echo "	<body>\n";
 	echo "		<p>You have searched for \"" . $searchString . "\".</p>\n";
 	$results = getResults($creds["username"], $creds["password"], $searchString,1);
-	printResult($results['url'],$results['title'],$results['description'],$results['date']);
+	for ($i = 0; $i < count($results); $i++) {
+		printResult($results[$i]['url'],$results[$i]['title'],$results[$i]['description'],$results[$i]['date']);
+	}
 	echo "	</body>\n";
 	echo "</html>\n";
 }
@@ -70,15 +72,27 @@ function getResults($username, $password, $searchString, $resultNumber) {
 	}
 
 	// Preform query
-	$sql = "SELECT * FROM sites WHERE title LIKE '%$searchString%' LIMIT 1";
+	$sql = "SELECT * FROM sites WHERE title LIKE '%$searchString%' OR description LIKE '%$searchString%' OR keywords LIKE '%$searchString%'";
 	$result = mysqli_query($conn, $sql);
 
 	// Parse data from result
-	$data = mysqli_fetch_assoc($result);
-	$output['title'] = $data['title'];
-	$output['url'] = $data['url'];
-	$output['description'] = $data['description'];
-	$output['date'] = $data['last_visited'];
+	//$data = mysqli_fetch_assoc($result);
+	//foreach ($data as $key => $value) {
+	//	echo "$key: $value <br>";
+	//}
+	//$output['title'] = $data['title'];
+	//$output['url'] = $data['url'];
+	//$output['description'] = $data['description'];
+	//$output['date'] = $data['last_visited'];
+
+	// Parse data from result
+	while ($row = mysqli_fetch_assoc($result)) {
+		//foreach ($row as $key => $value) {
+		//	echo "$key: $value <br>";
+		//}
+
+		$output[] = array('title' => $row['title'], 'url' => $row['url'], 'description' => $row['description'], 'date' => $row['last_visited']);
+	}
 
 	//Display Result
 	//printResult($url,$title,$description,$date);
