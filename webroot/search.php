@@ -81,7 +81,7 @@ function getResults($username, $password, $searchString, $resultNumber) {
 	}
 
 	// Preform query
-	$sql = "SELECT * FROM sites WHERE title LIKE '%$searchString%' OR description LIKE '%$searchString%' OR keywords LIKE '%$searchString%'";
+	$sql = "SELECT * FROM sites WHERE title LIKE '%$searchString%' OR description LIKE '%$searchString%' OR keywords LIKE '%$searchString%' OR headers LIKE '%$searchString%'";
 	$result = mysqli_query($conn, $sql);
 
 	// Parse data from result
