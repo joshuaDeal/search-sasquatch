@@ -95,7 +95,7 @@ main(){
 
 	# Create a new table
 	echo "Creating sites table in new database..."
-	mariadb -u $PRIVILEGED_USER -p$PRIVILEGED_USER_PASS $DATABASE -e "CREATE TABLE sites (id INT AUTO_INCREMENT PRIMARY KEY, first_visited DATETIME DEFAULT CURRENT_TIMESTAMP, last_visited DATETIME DEFAULT CURRENT_TIMESTAMP, url VARCHAR(255) UNIQUE, title VARCHAR(50), description VARCHAR(150), keywords VARCHAR(50));"
+	mariadb -u $PRIVILEGED_USER -p$PRIVILEGED_USER_PASS $DATABASE -e "CREATE TABLE sites (id INT AUTO_INCREMENT PRIMARY KEY, first_visited DATETIME DEFAULT CURRENT_TIMESTAMP, last_visited DATETIME DEFAULT CURRENT_TIMESTAMP, url VARCHAR(255) UNIQUE, title VARCHAR(50), description VARCHAR(150), keywords VARCHAR(50), headers VARCHAR(150));"
 	checkError
 }
 
