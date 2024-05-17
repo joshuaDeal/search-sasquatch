@@ -99,6 +99,11 @@ header#search {
 	height: 10vh;
 }
 
+header#search h1 {
+	color: #ffff99;
+	text-shadow: 0 0 20px #f1f1f1;
+}
+
 #result {
 	background: #333333;
 	border: 1px solid #cccccc;
