@@ -76,26 +76,9 @@ function getResults($username, $password, $searchString, $resultNumber) {
 	$result = mysqli_query($conn, $sql);
 
 	// Parse data from result
-	//$data = mysqli_fetch_assoc($result);
-	//foreach ($data as $key => $value) {
-	//	echo "$key: $value <br>";
-	//}
-	//$output['title'] = $data['title'];
-	//$output['url'] = $data['url'];
-	//$output['description'] = $data['description'];
-	//$output['date'] = $data['last_visited'];
-
-	// Parse data from result
 	while ($row = mysqli_fetch_assoc($result)) {
-		//foreach ($row as $key => $value) {
-		//	echo "$key: $value <br>";
-		//}
-
 		$output[] = array('title' => $row['title'], 'url' => $row['url'], 'description' => $row['description'], 'date' => $row['last_visited']);
 	}
-
-	//Display Result
-	//printResult($url,$title,$description,$date);
 
 	// Free result set
 	mysqli_free_result($result);
@@ -124,6 +107,5 @@ function main() {
 }
 
 main();
-#getResults($creds["username"], $creds["password"], $searchString,1);
 
 ?>
