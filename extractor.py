@@ -7,7 +7,6 @@ import requests
 import sys
 import subprocess
 import mysql.connector
-import re
 from bs4 import BeautifulSoup
 from crawler import getHtml
 
@@ -65,7 +64,6 @@ def parseKeywords(htmlSoup):
 		print("Meta keywords not found.")
 		return ""
 
-# TODO: Find better way to format this content.
 # Get headers.
 def parseHeaders(htmlSoup):
 	headingText = ''
@@ -73,10 +71,9 @@ def parseHeaders(htmlSoup):
 
 	for heading in headings:
 		text = heading.get_text()
-		# Remove special characters
-		cleanText = re.sub(r'[\w\s]', '', text)
-		headingText += cleanText + ' '
+		headingText += text + ' '
 
+	print("Heading Text: ",headingText.strip())
 	return headingText.strip()
 
 # Gets relevant metadata from a given url. Returns a dict.
