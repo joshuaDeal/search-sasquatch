@@ -70,7 +70,7 @@ def parseKeywords(htmlSoup):
 # Get headers.
 def parseHeaders(htmlSoup):
 	headingText = ''
-	headings = soup.find_all(['h1','h2','h3','h4','h4','h6'])
+	headings = htmlSoup.find_all(['h1','h2','h3','h4','h4','h6'])
 
 	for heading in headings:
 		text = heading.get_text()
@@ -78,7 +78,7 @@ def parseHeaders(htmlSoup):
 		cleanText = re.sub(r'[\w\s]', '', text)
 		headingText += cleanText + ' '
 
-	return heading_text.strip()
+	return headingText.strip()
 
 # Gets relevant metadata from a given url. Returns a dict.
 def getMeta(url):
@@ -110,7 +110,7 @@ def getMeta(url):
 		metaData['keywords'] = keywords
 
 		# Get headers
-		#metaData['headers'] = parseHeaders(soup)
+		metaData['headers'] = parseHeaders(soup)
 
 		return metaData
 	return None
