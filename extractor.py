@@ -4,7 +4,6 @@
 # TODO: Make sure that the handling of sql is safe.
 
 import requests
-import csv
 import shutil
 import os
 import sys
