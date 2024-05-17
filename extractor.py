@@ -51,7 +51,6 @@ def parseTitle(htmlSoup):
 def parseDescription(htmlSoup):
 	description = htmlSoup.find('meta', attrs={'name': 'description'})
 	if description:
-		print("Description: ",description['content'])
 		return description['content']
 	else:
 		print("Meta description not found.")
