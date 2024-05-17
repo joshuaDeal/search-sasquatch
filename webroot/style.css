@@ -81,6 +81,7 @@ a {
 
 a:visited {
 	color: #ff6600;
+	text-decoration: line-through;
 }
 
 a:hover {
