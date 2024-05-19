@@ -4,9 +4,21 @@
 
 from bs4 import BeautifulSoup
 import requests
+import sys
 from urllib.parse import urljoin
 from urllib.parse import urlparse
 from collections import deque
+
+# Evaluate command line arguments.
+def evalArguments():
+	output = {}
+
+	for i in range(len(sys.argv)):
+		# Let the user specify a list of sites to begin the crawling.
+		if sys.argv[i] == "--sites" or sys.argv[i] == "-s":
+			output['sites'] = sys.argv[i+1]
+
+	return output
 
 # Returns the html content from a provided url.
 def getHtml(url):
