@@ -10,6 +10,7 @@ import mysql.connector
 from bs4 import BeautifulSoup
 from crawler import getHtml
 
+# Evaluate command line arguments.
 def evalArguments():
 	output = {}
 
