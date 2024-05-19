@@ -10,13 +10,23 @@ import mysql.connector
 from bs4 import BeautifulSoup
 from crawler import getHtml
 
+# Print help message
+def printHelp():
+	print (sys.argv[0])
+	print("Usage: " + sys.argv[0], "--option")
+	print("\t--help\t\t\tDisplay this help message.")
+	print("\t--key <file path>\tSpecify SQL server decryption key path.")
+
 # Evaluate command line arguments.
 def evalArguments():
 	output = {}
 
 	for i in range(len(sys.argv)):
 		# Let user specify key file for database login
-		if sys.argv[i] == "--key" or sys.argv[i] == "-k":
+		if sys.argv[i] == "--help" or sys.argv[i] == "-h":
+			printHelp()
+			sys.exit
+		elif sys.argv[i] == "--key" or sys.argv[i] == "-k":
 			output['keyFile'] = sys.argv[i+1]
 
 	return output
