@@ -9,6 +9,15 @@ from urllib.parse import urljoin
 from urllib.parse import urlparse
 from collections import deque
 
+# Print help message
+def printHelp():
+	print(sys.argv[0])
+	print("Usage: " + sys.argv[0], "--[option]")
+	print("Options:")
+	print("\t--help\t\t\t\t\tDisplay this help message.")
+	print("\t--sites \"URLs separated by commas\"\tSpecify a list of root URLs to crawl.")
+
+
 # Evaluate command line arguments.
 def evalArguments():
 	output = {}
@@ -16,7 +25,10 @@ def evalArguments():
 
 	for i in range(len(sys.argv)):
 		# Let the user specify a list of sites to begin the crawling.
-		if sys.argv[i] == "--sites" or sys.argv[i] == "-s":
+		if sys.argv[i] == "--help" or sys.argv[i] == "-h":
+			printHelp()
+			sys.exit()
+		elif sys.argv[i] == "--sites" or sys.argv[i] == "-s":
 			output['sites'] = [s.strip() for s in sys.argv[i+1].split(",")]
 
 	return output
