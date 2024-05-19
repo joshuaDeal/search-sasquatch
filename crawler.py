@@ -16,7 +16,7 @@ def evalArguments():
 	for i in range(len(sys.argv)):
 		# Let the user specify a list of sites to begin the crawling.
 		if sys.argv[i] == "--sites" or sys.argv[i] == "-s":
-			output['sites'] = sys.argv[i+1]
+			output['sites'] = [s.strip() for s in sys.argv[i+1].split(",")]
 
 	return output
 
@@ -99,3 +99,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
+	#print(evalArguments())
