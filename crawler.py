@@ -12,6 +12,7 @@ from collections import deque
 # Evaluate command line arguments.
 def evalArguments():
 	output = {}
+	output['sites'] = ''
 
 	for i in range(len(sys.argv)):
 		# Let the user specify a list of sites to begin the crawling.
@@ -71,8 +72,14 @@ def getUrls(htmlContent, baseUrl):
 	return urls
 
 def main():
-	# Initialize a queue with the starting URL(s)
-	url_queue = deque(["https://en.wikipedia.org/wiki/Main_Page","https://ebay.com", "https://www.jstor.org/","https://news.ycombinator.com/","https://techcrunch.com/","https://arxiv.org/","https://lobste.rs/","https://thepiratebay10.xyz/"])
+	# Evaluate command line arguments
+	arguments = evalArguments()
+
+	if arguments['sites'] == '':
+		# Initialize a default queue with the starting URL(s)
+		url_queue = deque(["https://en.wikipedia.org/wiki/Main_Page","https://ebay.com", "https://www.jstor.org/","https://news.ycombinator.com/","https://techcrunch.com/","https://arxiv.org/","https://lobste.rs/","https://thepiratebay10.xyz/"])
+	else:
+		url_queue = deque(arguments['sites'])
 	
 	# Set to store visited URLs to avoid duplicates
 	visited_urls = set()
