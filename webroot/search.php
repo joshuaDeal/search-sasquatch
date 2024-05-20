@@ -72,6 +72,15 @@ function printResult($url,$title,$description,$date,$paragraphs) {
 function getResults($username, $password, $searchString) {
 	$output = array();
 
+	// Break $searchString down into words.
+	$cleanString = preg_replace("/[^a-zA-Z0-9\s]+/", "", $searchString);
+	$wordList = explode(" ", $cleanString);
+
+	//foreach ($wordList as $item) {
+	//	echo $item . "<br>";
+	//}
+		
+
 	// Get information from database
 	$servername = "localhost";
 	$dbname = "spaghetti_index";
