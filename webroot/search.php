@@ -45,7 +45,7 @@ function printSite($searchString, $creds) {
 	echo "			</div>";
 	echo "		</header>\n";
 	// Start of results
-	$results = getResults($creds["username"], $creds["password"], $searchString,1);
+	$results = getResults($creds["username"], $creds["password"], $searchString);
 	for ($i = 0; $i < count($results); $i++) {
 		printResult($results[$i]['url'],$results[$i]['title'],$results[$i]['description'],$results[$i]['date'],$results[$i]['paragraphs']);
 	}
@@ -69,7 +69,7 @@ function printResult($url,$title,$description,$date,$paragraphs) {
 }
 
 // Search function. Gets database creds and search query as input.
-function getResults($username, $password, $searchString, $resultNumber) {
+function getResults($username, $password, $searchString) {
 	$output = array();
 
 	// Get information from database
