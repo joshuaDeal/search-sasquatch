@@ -4,26 +4,27 @@
 
 // Read MySql username and password from a file.
 function getMySqlCreds($fileName, $keyFile) {
-	$credentials = array();
+        $credentials = array();
 
-	// Construct gpg command for decryption
-	$gpgCommand = "sudo gpg --decrypt --batch --passphrase-file $keyFile $fileName";
+        // Construct gpg command for decryption
+        $gpgCommand = "sudo gpg --decrypt --batch --passphrase-file $keyFile $fileName";
 
-	// Try and decrypt the creds file
-	exec($gpgCommand, $output, $returnCode);
-	if ($returnCode === 0) {
-		$decryptedData = implode("\n", $output);
-		list($username, $password) = explode(':', $decryptedData);
-		$credentials['username'] = $username;
-		$credentials['password'] = $password;
-		return $credentials;
-	} else {
-		echo "Error decrypting file\n";
-		return null;
-	}
+        // Try and decrypt the creds file
+        exec($gpgCommand, $output, $returnCode);
+        if ($returnCode === 0) {
+                $decryptedData = implode("\n", $output);
+                list($username, $password) = explode(':', $decryptedData);
+                $credentials['username'] = $username;
+                $credentials['password'] = $password;
+                return $credentials;
+        } else {
+                echo "Error decrypting file\n";
+                return null;
+        }
 }
 
-function printSite($searchString, $creds) {
+// Outputs html for webpage.
+function printSite($searchString) {
 	echo "<!DOCTYPE html>\n";
 	echo "<html lang=\"en\">\n";
 	echo "	<head>\n";
@@ -37,79 +38,103 @@ function printSite($searchString, $creds) {
 	echo "	<body>\n";
 	echo "		<header id=\"search\">\n";
 	echo "			<h1>Spaghetti Search</h1>\n";
-	echo "			<div>";
-	echo "				<form id=\"form\" action=\"./search.php\" method=\"post\">";
-	echo "					<input type=\"search\" name=\"q\" value=\"$searchString\">";
-	echo "					<button>Search</button>";
-	echo "				</form>";
-	echo "			</div>";
+	echo "			<div>\n";
+	echo "				<form id=\"form\" action=\"./search.php\" method=\"post\">\n";
+	echo "					<input type=\"search\" name=\"q\" value='$searchString'>\n";
+	echo "					<button>Search</button>\n";
+	echo "				</form>\n";
+	echo "			</div>\n";
 	echo "		</header>\n";
 	// Start of results
-	$results = getResults($creds["username"], $creds["password"], $searchString);
-	for ($i = 0; $i < count($results); $i++) {
-		printResult($results[$i]['url'],$results[$i]['title'],$results[$i]['description'],$results[$i]['date'],$results[$i]['paragraphs']);
-	}
+	getResults($searchString);
 	echo "	</body>\n";
 	echo "</html>\n";
 }
 
-// Create html for a result.
-function printResult($url,$title,$description,$date,$paragraphs) {
-	// Display the results
-	echo "<div id=\"result\">\n";
-	echo "	<a href=\"$url\"><h4>$title</h4></a>\n";
-	echo "	<p id=\"result-url\">$url</p>\n";
-	if ($description == "No description provided.") {
-		echo "	<p>$paragraphs</p>\n";
-	} else {
-		echo "	<p>$description</p>\n";
-	}
-	echo "	<p>last visited: $date</p>\n";
-	echo "</div>\n";
-}
+// Preforms TF-IDF search.
+function getResults($searchString) {
+	$serverName = "localhost";
+	$dbName = "spaghetti_index";
+	$username = "spaghetti-search";
+	$password = "password";
 
-// Search function. Gets database creds and search query as input.
-function getResults($username, $password, $searchString) {
-	$output = array();
-
-	// Break $searchString down into words.
-	$cleanString = preg_replace("/[^a-zA-Z0-9\s]+/", "", $searchString);
-	$wordList = explode(" ", $cleanString);
-
-	//foreach ($wordList as $item) {
-	//	echo $item . "<br>";
-	//}
-		
-
-	// Get information from database
-	$servername = "localhost";
-	$dbname = "spaghetti_index";
-
-	// Create database connection
-	$conn = mysqli_connect($servername,$username,$password,$dbname);
-
-	// Check the connection
+	// Create db connection
+	$conn = mysqli_connect($serverName, $username, $password, $dbName);
+	
+	// Check connection
 	if (!$conn) {
 		die("Connection failed" . mysqli_connect_error());
 	}
-
-	// Preform query
-	$sql = "SELECT * FROM sites WHERE title LIKE '%$searchString%' OR description LIKE '%$searchString%' OR keywords LIKE '%$searchString%' OR headers LIKE '%$searchString%' OR paragraphs LIKE '%$searchString%' OR lists like '%$searchString%'";
-	$result = mysqli_query($conn, $sql);
-
-	// Parse data from result
-	while ($row = mysqli_fetch_assoc($result)) {
-		$output[] = array('title' => $row['title'], 'url' => $row['url'], 'description' => $row['description'], 'date' => $row['last_visited'], 'paragraphs' => $row['paragraphs'], 'lists' => $row['lists']);
+	
+	// Tokenize the search string
+	$cleanString = preg_replace("/[^a-zA-Z0-9\s]+/", "", $searchString);
+	$cleanArray = explode(' ', $cleanString);
+	$searchTokens = [];
+	foreach ($cleanArray as $token) {
+		$token = " " . $token . " ";
+		$searchTokens[] = $token;
 	}
-
-	// Free result set
+	
+	// Calculate the TF for each token
+	$searchTermFrequency = array_count_values($searchTokens);
+	
+	// Calculate the IDF for each token
+	$idf = array();
+	foreach ($searchTokens as $token) {
+		$sql = "SELECT COUNT(DISTINCT id) AS document_count FROM sites WHERE keywords LIKE '%$token%' OR title LIKE '%$token%' OR description LIKE '%$token%' OR headers LIKE '%$token%' OR paragraphs LIKE '%$token%' OR lists LIKE '%$token%'";
+		$result = mysqli_query($conn, $sql);
+		$row = mysqli_fetch_assoc($result);
+		$idf[$token] = $row['document_count'];
+	}
+	
+	// Calculate the TF-IDF for each document
+	$tfidf = array();
+	$sql = "SELECT id, url, keywords, title, description, headers, paragraphs, lists FROM sites";
+	$result = mysqli_query($conn, $sql);
+	while ($row = mysqli_fetch_assoc($result)) {
+		$tfidfScore = 0;
+		foreach ($searchTokens as $token) {
+			$tf = substr_count(strtolower($row['keywords'] . ' ' . $row['title'] . ' ' . $row['description'] . ' ' . $row['headers'] . ' ' . $row['paragraphs'] . ' ' . $row['lists']), $token);
+			$idfValue = $idf[$token]; // Use IDF value calculated previously
+	
+			// Calculate TF-IDF score for each document
+			if ($idfValue != 0) {
+				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue); // Adjust the calculation as needed
+			}
+		}
+		$tfidf[$row['url']] = $tfidfScore;
+	}
+	
+	// Sort documents by TF-IDF
+	arsort($tfidf);
+	
+	// Output the results
+	foreach ($tfidf as $url => $score) {
+		if ($score != 0) {
+			$sql = "SELECT title, description, last_visited, paragraphs  FROM sites WHERE url = '$url'";
+			$result = mysqli_query($conn, $sql);
+			$row = mysqli_fetch_assoc($result);
+	
+			echo "<div id='result'>\n";
+			echo "	<a href='$url'><h4>$row[title]</h4></a>\n";
+			echo "	<p id='result-url'>$url</p>\n";
+			if ($row['description'] == "No description provided.") {
+				echo "  <p>$row[paragraphs]</p>\n";
+			} else {
+				echo "  <p>$row[description]</p>\n";
+			}
+			echo "	<p>TF-IDF Score: $score</p>\n";
+			echo "</div>\n";
+	
+			mysqli_free_result($result);
+		}
+	}
+	
+	// Free results set
 	mysqli_free_result($result);
-
-	// Close database connection
+	
+	// Close connection
 	mysqli_close($conn);
-
-	// Output our findings
-	return $output;
 }
 
 function main() {
@@ -122,12 +147,9 @@ function main() {
 			exit;
 		}
 
-		//$creds = getMySqlCreds("../db_creds.gpg", "../decryption_key.txt");
-		$creds = array("username" => "spaghetti-search", "password" => "password");
-		printSite($searchString, $creds);
+		printSite($searchString);
 	}
 }
 
 main();
-
 ?>
