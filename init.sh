@@ -78,7 +78,7 @@ main(){
 	checkError
 	# Write user credentials to file that extractor.py can use.
 	echo "Saving credentials to file..."
-	echo "$USERNAME:$PASSWORD" | gpg --batch --yes --symmetric --cipher-algo AES256 --passphrase-file decryption_key.txt --output webroot/db_creds.gpg
+	echo "$USERNAME:$PASSWORD" | gpg --batch --yes --symmetric --cipher-algo AES256 --passphrase-file webroot/decryption_key.txt --output webroot/db_creds.gpg
 	checkError
 
 	# Set up user privileges
