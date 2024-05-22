@@ -54,11 +54,12 @@ function printSite($searchString) {
 // Preforms TF-IDF search.
 function getResults($searchString) {
 	define("TITLE_POINTS", 6);
+	define("HEADER_POINTS", 4);
 	$serverName = "localhost";
 	$dbName = "spaghetti_index";
 	$username = "spaghetti-search";
 	$password = "password";
-	$extraPoints = TITLE_POINTS;
+	$extraPoints = TITLE_POINTS + HEADER_POINTS;
 
 	// Create db connection
 	$conn = mysqli_connect($serverName, $username, $password, $dbName);
@@ -99,11 +100,17 @@ function getResults($searchString) {
 			$tf = substr_count(strtolower($row['keywords'] . ' ' . $row['title'] . ' ' . $row['description'] . ' ' . $row['headers'] . ' ' . $row['paragraphs'] . ' ' . $row['lists']), strtolower($token));
 			$idfValue = $idf[strtolower($token)]; // Use IDF value calculated previously
 
+			// Calculte TF-IDF score.
+			$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue);
+
 			// Give extra points if the token appears in the title
 			if (stripos(strtolower($row['title']), strtolower(trim($token))) !== false) {
-				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue) + TITLE_POINTS; // Extra points
-			} else {
-				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue);
+				$tfidfScore += TITLE_POINTS; // Extra points
+			}
+	
+			// Give extra points if the token appears in the header text. 
+			if (stripos(strtolower($row['headers']), strtolower(trim($token))) !== false) {
+				$tfidfScore += HEADER_POINTS; // Extra points
 			}
 		}
 		$tfidf[$row['url']] = $tfidfScore;
