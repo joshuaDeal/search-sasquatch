@@ -4,23 +4,23 @@
 
 // Read MySql username and password from a file.
 function getMySqlCreds($fileName, $keyFile) {
-        $credentials = array();
+		$credentials = array();
 
-        // Construct gpg command for decryption
-        $gpgCommand = "sudo gpg --decrypt --batch --passphrase-file $keyFile $fileName";
+		// Construct gpg command for decryption
+		$gpgCommand = "sudo gpg --decrypt --batch --passphrase-file $keyFile $fileName";
 
-        // Try and decrypt the creds file
-        exec($gpgCommand, $output, $returnCode);
-        if ($returnCode === 0) {
-                $decryptedData = implode("\n", $output);
-                list($username, $password) = explode(':', $decryptedData);
-                $credentials['username'] = $username;
-                $credentials['password'] = $password;
-                return $credentials;
-        } else {
-                echo "Error decrypting file\n";
-                return null;
-        }
+		// Try and decrypt the creds file
+		exec($gpgCommand, $output, $returnCode);
+		if ($returnCode === 0) {
+				$decryptedData = implode("\n", $output);
+				list($username, $password) = explode(':', $decryptedData);
+				$credentials['username'] = $username;
+				$credentials['password'] = $password;
+				return $credentials;
+		} else {
+				echo "Error decrypting file\n";
+				return null;
+		}
 }
 
 // Outputs html for webpage.
@@ -96,10 +96,12 @@ function getResults($searchString) {
 		foreach ($searchTokens as $token) {
 			$tf = substr_count(strtolower($row['keywords'] . ' ' . $row['title'] . ' ' . $row['description'] . ' ' . $row['headers'] . ' ' . $row['paragraphs'] . ' ' . $row['lists']), strtolower($token));
 			$idfValue = $idf[strtolower($token)]; // Use IDF value calculated previously
-	
-			// Calculate TF-IDF score for each document
-			if ($idfValue != 0) {
-				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue); // Adjust the calculation as needed
+
+			// Give extra points if the token appears in the title
+			if (stripos(strtolower($row['title']), strtolower(trim($token))) !== false) {
+				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue) + 1; // Extra points
+			} else {
+				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue);
 			}
 		}
 		$tfidf[$row['url']] = $tfidfScore;
