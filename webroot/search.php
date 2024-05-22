@@ -99,7 +99,7 @@ function getResults($searchString) {
 
 			// Give extra points if the token appears in the title
 			if (stripos(strtolower($row['title']), strtolower(trim($token))) !== false) {
-				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue) + 1; // Extra points
+				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue) + 6; // Extra points
 			} else {
 				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue);
 			}
