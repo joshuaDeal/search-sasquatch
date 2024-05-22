@@ -112,7 +112,7 @@ function getResults($searchString) {
 	
 	// Output the results
 	foreach ($tfidf as $url => $score) {
-		if ($score != 0) {
+		if ($score > 1) {
 			$sql = "SELECT title, description, last_visited, paragraphs  FROM sites WHERE url = '$url'";
 			$result = mysqli_query($conn, $sql);
 			$row = mysqli_fetch_assoc($result);
