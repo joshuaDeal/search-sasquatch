@@ -161,7 +161,7 @@ function main() {
 			header('Location: http://search.example.com/');
 			exit;
 		}
-		$creds = getMySqlCreds('../db_creds.gpg', '../decryption_key.txt');
+		$creds = getMySqlCreds('db_creds.gpg', 'decryption_key.txt');
 		printSite($searchString, $creds);
 	}
 }
