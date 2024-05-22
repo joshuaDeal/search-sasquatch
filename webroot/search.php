@@ -72,7 +72,7 @@ function getResults($searchString) {
 	$searchTokens = [];
 	foreach ($cleanArray as $token) {
 		$token = " " . $token . " ";
-		$searchTokens[] = $token;
+		$searchTokens[] = strtolower($token);
 	}
 	
 	// Calculate the TF for each token
@@ -81,7 +81,7 @@ function getResults($searchString) {
 	// Calculate the IDF for each token
 	$idf = array();
 	foreach ($searchTokens as $token) {
-		$sql = "SELECT COUNT(DISTINCT id) AS document_count FROM sites WHERE keywords LIKE '%$token%' OR title LIKE '%$token%' OR description LIKE '%$token%' OR headers LIKE '%$token%' OR paragraphs LIKE '%$token%' OR lists LIKE '%$token%'";
+		$sql = "SELECT COUNT(DISTINCT id) AS document_count FROM sites WHERE LOWER(keywords) LIKE LOWER('%$token%') OR LOWER(title) LIKE LOWER('%$token%') OR LOWER(description) LIKE LOWER('%$token%') OR LOWER(headers) LIKE LOWER('%$token%') OR LOWER(paragraphs) LIKE LOWER('%$token%') OR LOWER(lists) LIKE LOWER('%$token%')";
 		$result = mysqli_query($conn, $sql);
 		$row = mysqli_fetch_assoc($result);
 		$idf[$token] = $row['document_count'];
@@ -94,8 +94,8 @@ function getResults($searchString) {
 	while ($row = mysqli_fetch_assoc($result)) {
 		$tfidfScore = 0;
 		foreach ($searchTokens as $token) {
-			$tf = substr_count(strtolower($row['keywords'] . ' ' . $row['title'] . ' ' . $row['description'] . ' ' . $row['headers'] . ' ' . $row['paragraphs'] . ' ' . $row['lists']), $token);
-			$idfValue = $idf[$token]; // Use IDF value calculated previously
+			$tf = substr_count(strtolower($row['keywords'] . ' ' . $row['title'] . ' ' . $row['description'] . ' ' . $row['headers'] . ' ' . $row['paragraphs'] . ' ' . $row['lists']), strtolower($token));
+			$idfValue = $idf[strtolower($token)]; // Use IDF value calculated previously
 	
 			// Calculate TF-IDF score for each document
 			if ($idfValue != 0) {
