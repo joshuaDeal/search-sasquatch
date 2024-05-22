@@ -1,5 +1,5 @@
 # spaghetti-search
-An internet search engine written mostly in python.
+An internet search engine written mostly in python. Currently TF-IDF based.
 
 ## init.sh
 Initializes a database for storing webpages and the metadata collected from them. Also, creates a user account for managing that database.
@@ -12,3 +12,6 @@ Meta data extractor / web scraper. Extracts meta data from html and stores it in
 
 ## webroot/
 Directory containing source files for website user interface / front end.
+
+### search.php
+Preforms a TF-IDF based search and outputs a results page.
