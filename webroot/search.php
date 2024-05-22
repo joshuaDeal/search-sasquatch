@@ -1,13 +1,11 @@
 <?php
 
-// TODO: Make this program work with gpg! Don't hardcode mysql log in credentials!
-
 // Read MySql username and password from a file.
 function getMySqlCreds($fileName, $keyFile) {
 	$credentials = array();
 
 	// Construct gpg command for decryption
-	$gpgCommand = "sudo gpg --decrypt --batch --passphrase-file $keyFile $fileName";
+	$gpgCommand = "sudo /sbin/gpg --decrypt --batch --passphrase-file $keyFile $fileName";
 
 	// Try and decrypt the creds file
 	exec($gpgCommand, $output, $returnCode);
@@ -24,7 +22,7 @@ function getMySqlCreds($fileName, $keyFile) {
 }
 
 // Outputs html for webpage.
-function printSite($searchString) {
+function printSite($searchString, $creds) {
 	echo "<!DOCTYPE html>\n";
 	echo "<html lang=\"en\">\n";
 	echo "	<head>\n";
@@ -46,20 +44,20 @@ function printSite($searchString) {
 	echo "			</div>\n";
 	echo "		</header>\n";
 	// Start of results
-	getResults($searchString);
+	getResults($searchString, $creds);
 	echo "	</body>\n";
 	echo "</html>\n";
 }
 
 // Preforms TF-IDF search.
-function getResults($searchString) {
+function getResults($searchString, $creds) {
 	define("TITLE_POINTS", 6);
 	define("HEADER_POINTS", 4);
 	define("KEYWORD_POINTS", 5);
 	$serverName = "localhost";
 	$dbName = "spaghetti_index";
-	$username = "spaghetti-search";
-	$password = "password";
+	$username = $creds['username'];
+	$password = $creds['password'];
 	$extraPoints = TITLE_POINTS + HEADER_POINTS + KEYWORD_POINTS;
 
 	// Create db connection
@@ -163,8 +161,8 @@ function main() {
 			header('Location: http://search.example.com/');
 			exit;
 		}
-
-		printSite($searchString);
+		$creds = getMySqlCreds('../db_creds.gpg', '../decryption_key.txt');
+		printSite($searchString, $creds);
 	}
 }
 
