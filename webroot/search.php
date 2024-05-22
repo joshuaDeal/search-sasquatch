@@ -55,11 +55,12 @@ function printSite($searchString) {
 function getResults($searchString) {
 	define("TITLE_POINTS", 6);
 	define("HEADER_POINTS", 4);
+	define("KEYWORD_POINTS", 5);
 	$serverName = "localhost";
 	$dbName = "spaghetti_index";
 	$username = "spaghetti-search";
 	$password = "password";
-	$extraPoints = TITLE_POINTS + HEADER_POINTS;
+	$extraPoints = TITLE_POINTS + HEADER_POINTS + KEYWORD_POINTS;
 
 	// Create db connection
 	$conn = mysqli_connect($serverName, $username, $password, $dbName);
@@ -111,6 +112,11 @@ function getResults($searchString) {
 			// Give extra points if the token appears in the header text. 
 			if (stripos(strtolower($row['headers']), strtolower(trim($token))) !== false) {
 				$tfidfScore += HEADER_POINTS; // Extra points
+			}
+
+			// Give extra points if the token appears in the keywords. 
+			if (stripos(strtolower($row['keywords']), strtolower(trim($token))) !== false) {
+				$tfidfScore += KEYWORD_POINTS; // Extra points
 			}
 		}
 		$tfidf[$row['url']] = $tfidfScore;
