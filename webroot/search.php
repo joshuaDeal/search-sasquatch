@@ -53,10 +53,12 @@ function printSite($searchString) {
 
 // Preforms TF-IDF search.
 function getResults($searchString) {
+	define("TITLE_POINTS", 6);
 	$serverName = "localhost";
 	$dbName = "spaghetti_index";
 	$username = "spaghetti-search";
 	$password = "password";
+	$extraPoints = TITLE_POINTS;
 
 	// Create db connection
 	$conn = mysqli_connect($serverName, $username, $password, $dbName);
@@ -99,7 +101,7 @@ function getResults($searchString) {
 
 			// Give extra points if the token appears in the title
 			if (stripos(strtolower($row['title']), strtolower(trim($token))) !== false) {
-				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue) + 6; // Extra points
+				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue) + TITLE_POINTS; // Extra points
 			} else {
 				$tfidfScore += $tf * log((mysqli_num_rows($result) + 1) / $idfValue);
 			}
@@ -112,7 +114,7 @@ function getResults($searchString) {
 	
 	// Output the results
 	foreach ($tfidf as $url => $score) {
-		if ($score > 1) {
+		if ($score > $extraPoints) {
 			$sql = "SELECT title, description, last_visited, paragraphs  FROM sites WHERE url = '$url'";
 			$result = mysqli_query($conn, $sql);
 			$row = mysqli_fetch_assoc($result);
