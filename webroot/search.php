@@ -161,7 +161,8 @@ function main() {
 			header('Location: http://search.example.com/');
 			exit;
 		}
-		$creds = getMySqlCreds('db_creds.gpg', 'decryption_key.txt');
+		// Make sure that access to these files is restricted. They should only be accessed by administrators.
+		$creds = getMySqlCreds('../db_creds.gpg', '../decryption_key.txt');
 		printSite($searchString, $creds);
 	}
 }
