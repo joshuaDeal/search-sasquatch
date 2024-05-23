@@ -74,11 +74,11 @@ main(){
 	# TODO: **SECURITY** Keep in mind the security implications of this step. It could probably be improved upon.
 	# Create decryption key file
 	echo "Creating decryption key file..."
-	openssl rand -base64 32 > webroot/decryption_key.txt
+	openssl rand -base64 32 > decryption_key.txt
 	checkError
 	# Write user credentials to file that extractor.py can use.
 	echo "Saving credentials to file..."
-	echo "$USERNAME:$PASSWORD" | gpg --batch --yes --symmetric --cipher-algo AES256 --passphrase-file webroot/decryption_key.txt --output webroot/db_creds.gpg
+	echo "$USERNAME:$PASSWORD" | gpg --batch --yes --symmetric --cipher-algo AES256 --passphrase-file decryption_key.txt --output db_creds.gpg
 	checkError
 
 	# Set up user privileges
