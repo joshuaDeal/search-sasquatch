@@ -211,7 +211,7 @@ def main():
 		print("Parsing " + url + "...")
 		meta = getMeta(url)
 		if meta != None:
-			updateDataBase(meta,getMySqlCreds('webroot/db_creds.gpg',arguments['keyFile']))
+			updateDataBase(meta,getMySqlCreds('db_creds.gpg',arguments['keyFile']))
 		i = i + 1
 
 if __name__ == "__main__":
