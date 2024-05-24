@@ -7,6 +7,7 @@ import requests
 import sys
 import subprocess
 import mysql.connector
+from datetime import datetime
 from bs4 import BeautifulSoup
 from crawler import getHtml
 
@@ -109,8 +110,12 @@ def parseLists(htmlSoup):
 	return listsText.strip()
 
 # Gets relevant metadata from a given url. Returns a dict.
-def getMeta(url):
-	metaData = {'url':url}
+def getMeta(url, dataDict=None):
+	metaData = {'url': url}
+
+	if dataDict is None or 'first_visited' not in dataDict:
+		metaData['first_visited'] = datetime.now()
+
 
 	# Get html content.
 	htmlContent = getHtml(url)
@@ -186,7 +191,7 @@ def updateDataBase(dataDict,creds):
 		cursor = connection.cursor()
 
 		# Update the database with the data from dataDict
-		query = "INSERT INTO sites (url, title, description, keywords, headers, paragraphs, lists) VALUES (%s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE url = VALUES(url), title = VALUES(title), description = VALUES(description), keywords = VALUES(keywords), headers = VALUES(headers), paragraphs = VALUES(paragraphs), lists = VALUES(lists)"
+		query = "INSERT INTO sites (url, title, description, keywords, headers, paragraphs, lists, first_visited, last_visited) VALUES (%s, %s, %s, %s, %s, %s, %s, IFNULL(first_visited, CURRENT_TIMESTAMP), IFNULL(last_visited, CURRENT_TIMESTAMP)) ON DUPLICATE KEY UPDATE title = VALUES(title), description = VALUES(description), keywords = VALUES(keywords), headers = VALUES(headers), paragraphs = VALUES(paragraphs), lists = VALUES(lists), last_visited = CURRENT_TIMESTAMP"
 		cursor.execute(query, (str(dataDict['url']), str(dataDict['title']), str(dataDict['description']), str(dataDict['keywords']), str(dataDict['headers']), str(dataDict['paragraphs']), str(dataDict['lists'])))
 		# Commit the changes to the database
 		connection.commit()
