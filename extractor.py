@@ -121,8 +121,8 @@ def getMeta(url):
 
 		# Get the page title.
 		title = parseTitle(soup)
-		if len(title) > 50:
-			title = title[:50]
+		if len(title) > 70:
+			title = title[:70]
 		metaData['title'] = title
 
 		# Get meta description.
@@ -139,20 +139,20 @@ def getMeta(url):
 
 		# Get headers
 		headers = parseHeaders(soup)
-		if len(headers) > 150:
-			headers = headers[:150]
+		if len(headers) > 300:
+			headers = headers[:300]
 		metaData['headers'] = headers
 
 		# Get paragraphs
 		paragraphs = parseParagraphs(soup)
-		if len(paragraphs) > 255:
-			paragraphs = paragraphs[:255]
+		if len(paragraphs) > 500:
+			paragraphs = paragraphs[:500]
 		metaData['paragraphs'] = paragraphs
 
 		# Get lists
 		lists = parseLists(soup)
-		if len(lists) > 255:
-			lists = lists[:255]
+		if len(lists) > 300:
+			lists = lists[:300]
 		metaData['lists'] = lists
 
 		return metaData
