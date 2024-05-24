@@ -37,7 +37,7 @@ function printSite($searchString, $creds) {
 	echo "		<header id=\"search\">\n";
 	echo "			<h1>Search Sasquatch</h1>\n";
 	echo "			<div>\n";
-	echo "				<form id=\"form\" action=\"./search.php\" method=\"post\">\n";
+	echo "				<form id=\"form\" action=\"./search.php\" method=\"get\">\n";
 	echo "					<input type=\"search\" name=\"q\" value='$searchString'>\n";
 	echo "					<button>Search</button>\n";
 	echo "				</form>\n";
@@ -153,9 +153,9 @@ function getResults($searchString, $creds) {
 }
 
 function main() {
-	// Make sure we have received a post request.
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		$searchString = filter_var($_POST["q"], FILTER_SANITIZE_STRING);
+	// Make sure we have received a query parameter 'q' with the search terms.
+	if (isset($_GET["q"])) {
+		$searchString = filter_var($_GET["q"], FILTER_SANITIZE_STRING);
 
 		if (empty($searchString)) {
 			header('Location: http://search.example.com/');
