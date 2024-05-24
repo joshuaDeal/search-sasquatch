@@ -1,4 +1,4 @@
-# spaghetti-search
+# search-sasquatch
 An internet search engine written mostly in python. Currently TF-IDF based.
 
 ## init.sh

@@ -46,9 +46,9 @@ evalArguments(){
 main(){
 	# Default values
 	PRIVILEGED_USER='root'
-	USERNAME='spaghetti-search'
+	USERNAME='search-sasquatch'
 	HOST='localhost'
-	DATABASE='spaghetti_index'
+	DATABASE='sasquatch_index'
 
 	# Evaluate command line arguments
 	evalArguments $@

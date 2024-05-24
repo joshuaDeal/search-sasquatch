@@ -181,7 +181,7 @@ def updateDataBase(dataDict,creds):
 
 	try:
 		# Create a connection to the MariaDB database
-		connection = mysql.connector.connect(host='localhost', unix_socket='/var/run/mysqld/mysqld.sock', database='spaghetti_index', user=creds['username'], password=creds['password'])
+		connection = mysql.connector.connect(host='localhost', unix_socket='/var/run/mysqld/mysqld.sock', database='sasquatch_index', user=creds['username'], password=creds['password'])
 
 		cursor = connection.cursor()
 

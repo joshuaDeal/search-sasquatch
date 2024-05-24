@@ -26,7 +26,7 @@ function printSite($searchString, $creds) {
 	echo "<!DOCTYPE html>\n";
 	echo "<html lang=\"en\">\n";
 	echo "	<head>\n";
-	echo "		<title>" . $searchString . " - Spaghetti Search!</title>\n";
+	echo "		<title>" . $searchString . " - Search Sasquatch!</title>\n";
 	echo "		<link rel=\"stylesheet\" href=\"style.css\">\n";
 	echo "		<link rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/x-icon\">\n";
 	echo "		<meta name=\"description\" content=\"Search results for " . $searchString . "\">\n";
@@ -35,7 +35,7 @@ function printSite($searchString, $creds) {
 	echo "	</head>\n";
 	echo "	<body>\n";
 	echo "		<header id=\"search\">\n";
-	echo "			<h1>Spaghetti Search</h1>\n";
+	echo "			<h1>Search Sasquatch</h1>\n";
 	echo "			<div>\n";
 	echo "				<form id=\"form\" action=\"./search.php\" method=\"post\">\n";
 	echo "					<input type=\"search\" name=\"q\" value='$searchString'>\n";
@@ -55,7 +55,7 @@ function getResults($searchString, $creds) {
 	define("HEADER_POINTS", 4);
 	define("KEYWORD_POINTS", 5);
 	$serverName = "localhost";
-	$dbName = "spaghetti_index";
+	$dbName = "sasquatch_index";
 	$username = $creds['username'];
 	$password = $creds['password'];
 	$extraPoints = TITLE_POINTS + HEADER_POINTS + KEYWORD_POINTS;
