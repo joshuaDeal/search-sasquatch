@@ -89,7 +89,7 @@ def main():
 
 	if arguments['sites'] == '':
 		# Initialize a default queue with the starting URL(s)
-		url_queue = deque(["https://en.wikipedia.org/wiki/Main_Page","https://ebay.com", "https://www.jstor.org/","https://news.ycombinator.com/","https://techcrunch.com/","https://arxiv.org/","https://lobste.rs/","https://thepiratebay10.xyz/"])
+		url_queue = deque(["https://en.wikipedia.org/wiki/Main_Page", "https://www.jstor.org/","https://news.ycombinator.com/","https://techcrunch.com/","https://arxiv.org/","https://lobste.rs/","https://thepiratebay10.xyz/"])
 	else:
 		url_queue = deque(arguments['sites'])
 	
