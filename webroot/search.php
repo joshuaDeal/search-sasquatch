@@ -58,7 +58,7 @@ function getResults($searchString, $creds) {
 	$dbName = "sasquatch_index";
 	$username = $creds['username'];
 	$password = $creds['password'];
-	$extraPoints = TITLE_POINTS + HEADER_POINTS + KEYWORD_POINTS -4;
+	$extraPoints = TITLE_POINTS + HEADER_POINTS + KEYWORD_POINTS -7;
 
 	// Create db connection
 	$conn = mysqli_connect($serverName, $username, $password, $dbName);
