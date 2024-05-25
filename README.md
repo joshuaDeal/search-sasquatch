@@ -4,6 +4,9 @@ An internet search engine written mostly in python. Currently TF-IDF based.
 ## init.sh
 Initializes a database for storing webpages and the metadata collected from them. Also, creates a user account for managing that database.
 
+## purge.sh
+Purges old data from database after it reaches a specific age. Should be run as a cron job periodically.
+
 ## crawler.py
 Webcrawler. Crawls the internet for new urls and outputs its findings to a file called 'raw-urls.txt'.
 
