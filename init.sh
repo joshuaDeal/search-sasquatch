@@ -97,6 +97,10 @@ main(){
 	echo "Creating sites table in new database..."
 	mariadb -u $PRIVILEGED_USER -p$PRIVILEGED_USER_PASS $DATABASE -e "CREATE TABLE sites (id INT AUTO_INCREMENT PRIMARY KEY, first_visited DATETIME DEFAULT CURRENT_TIMESTAMP, last_visited DATETIME DEFAULT CURRENT_TIMESTAMP, url VARCHAR(255) UNIQUE, title VARCHAR(70), description VARCHAR(150), keywords VARCHAR(50), headers VARCHAR(300), paragraphs VARCHAR(500), lists VARCHAR(300));"
 	checkError
+
+	# Add cron job to run purge.sh.
+	(crontab -l ; echo "0 0 * * * `pwd`/purge.sh") | crontab -
+	(crontab -l ; echo "0 12 * * * `pwd`/purge.sh") | crontab -
 }
 
 main $@
