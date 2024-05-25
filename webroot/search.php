@@ -35,7 +35,14 @@ function printSite($searchString, $creds) {
 	echo "	</head>\n";
 	echo "	<body>\n";
 	echo "		<header id=\"search\">\n";
-	echo "			<h1>Search Sasquatch</h1>\n";
+	echo "			<pre>";
+	echo " ____                              _       _       ____                      _     \n";
+	echo "/ ___|  __ _ ___  __ _ _   _  __ _| |_ ___| |__   / ___|  ___  __ _ _ __ ___| |__  \n";
+	echo "\___ \ / _` / __|/ _` | | | |/ _` | __/ __| '_ \  \___ \ / _ \/ _` | '__/ __| '_ \ \n";
+	echo " ___) | (_| \__ \ (_| | |_| | (_| | || (__| | | |  ___) |  __/ (_| | | | (__| | | |\n";
+	echo "|____/ \__,_|___/\__, |\__,_|\__,_|\__\___|_| |_| |____/ \___|\__,_|_|  \___|_| |_|\n";
+	echo "                    |_|                                                            \n";
+	echo "			</pre>";
 	echo "			<div>\n";
 	echo "				<form id=\"form\" action=\"./search.php\" method=\"get\">\n";
 	echo "					<input type=\"search\" name=\"q\" value='$searchString'>\n";

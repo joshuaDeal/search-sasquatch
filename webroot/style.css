@@ -1,123 +1,66 @@
 body {
-	text-align: center;
-	background: linear-gradient(#1a1a1a, #333333) fixed;
-	color: #cccccc;
-	font-family: Arial, sans-serif;
-}
-
-h1 {
-	font-size: 50px;
-	color: #ff6600;
-}
-
-pre {
-	font-size: 15px;
-	color: #66cccc;
+	background-color: #002b36;
+	color: #839496;
+	font-family: 'Courier New', Courier, monospace;
+	margin: 0;
+	padding: 0;
 }
 
 header {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 60vh;
-}
-
-header pre {
-	color: #ffff99;
-	text-shadow: 0 0 20px #f1f1f1;
-	font-size: 21px;
-}
-
-header pre:hover {
-	animation: headerColor 20s infinite;
-}
-
-@keyframes headerColor {
-  0% { color: #ffff99; }
-  10% { color: purple; }
-  20% { color: red; }
-  30% { color: yellow; }
-  40% { color: blue; }
-  50% { color: green; }
-  60% { color: orange; }
-  70% { color: magenta; }
-  80% { color: teal; }
-  90% { color: pink; }
-  100% { color: #ffff99; }
-}
-
-input[type="search"] {
-	width: 500px;
-}
-
-input, button {
-	font-size: 14px;
-	background: #444444;
-	color: #cccccc;
-	border: none;
-	padding: 5px 10px;
-	margin: 5px;
-}
-
-button:hover {
-	background: #ff6600;
-	color: #333333;
+	background-color: #073642;
+	color: #93a1a1;
+	text-align: center;
+	padding: 20px;
 }
 
 form {
-	padding-top: 20px;
-	padding-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 20px;
 }
 
-label {
-	display: block;
-	margin-bottom: 5px;
+input[type="search"] {
+	padding: 5px;
+	width: 100%;
+	max-width: 300px;
+	border: 1px solid #073642;
+	border-radius: 5px;
+	margin-bottom: 10px;
 }
 
-a {
-	color: #66cccc;
-	text-decoration: none;
+button {
+	padding: 5px 10px;
+	background-color: #268bd2;
+	color: #fdf6e3;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
 }
 
-a:visited {
-	color: #ff6600;
-	text-decoration: line-through;
-}
-
-a:hover {
-	color: #ffff99;
-}
-
-ul {
-	padding-top: 20px;
-	list-style-type: none;
-	column-count: 3;
-}
-
-header#search {
-	justify-content: left;
-	height: 10vh;
-}
-
-header#search h1 {
-	color: #ffff99;
-	text-shadow: 0 0 20px #f1f1f1;
-}
-
-header#search h1:hover {
-	animation: headerColor 20s infinite;
+button:hover {
+	background-color: #6c71c4;
 }
 
 #result {
-	background: #333333;
-	border: 1px solid #cccccc;
-	color: #cccccc;
+	background-color: #073642;
+	color: #93a1a1;
 	padding: 10px;
 	margin: 10px;
-	text-align: left;
+	border: 1px solid #586e75;
+	border-radius: 5px;
+}
+
+#result h4 {
+	margin: 0;
+	color: #b58900;
+}
+
+p {
+	margin: 5px 0;
 }
 
 #result-url {
-	color: red;
+	color: #2aa198;
 	font-style: italic;
 }
