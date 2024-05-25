@@ -83,7 +83,7 @@ main(){
 
 	# Set up user privileges
 	echo "Setting up $USERNAME's privileges..."
-	mariadb -u $PRIVILEGED_USER -p$PRIVILEGED_USER_PASS -e "GRANT INSERT, SELECT, UPDATE ON $DATABASE.* TO '$USERNAME'@'$HOST';"
+	mariadb -u $PRIVILEGED_USER -p$PRIVILEGED_USER_PASS -e "GRANT INSERT, SELECT, UPDATE, DELETE ON $DATABASE.* TO '$USERNAME'@'$HOST';"
 	checkError
 	echo "Setting up $USERNAME's constraints..."
 	mariadb -u $PRIVILEGED_USER -p$PRIVILEGED_USER_PASS -e "REVOKE DELETE ON *.* FROM '$USERNAME'@'$HOST';"
