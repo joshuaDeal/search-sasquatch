@@ -64,3 +64,15 @@ p {
 	color: #d3869b;
 	font-style: italic;
 }
+
+@media (max-width: 666px) {
+	pre {
+		font-size: 5px;
+	}
+}
+
+@media (max-width: 247px) {
+	pre {
+		font-size: 2px;
+	}
+}
