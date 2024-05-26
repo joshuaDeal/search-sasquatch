@@ -58,6 +58,7 @@ button:hover {
 
 p {
 	margin: 5px 0;
+	overflow: hidden;
 }
 
 #result-url {
