@@ -63,6 +63,9 @@ p {
 #result-url {
 	color: #d3869b;
 	font-style: italic;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 @media (max-width: 666px) {
