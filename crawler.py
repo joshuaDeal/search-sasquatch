@@ -45,7 +45,7 @@ def getHtml(url):
 
 	try:
 		htmlContent = None
-		response = requests.get(url)
+		response = requests.get(url, timeout=15)
 		
 		if response.status_code == 200:
 			htmlContent = response.content
