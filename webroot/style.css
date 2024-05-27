@@ -54,6 +54,7 @@ button:hover {
 #result h4 {
 	margin: 0;
 	color: #fabd2f;
+	overflow: hidden;
 }
 
 p {
