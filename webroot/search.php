@@ -61,11 +61,12 @@ function getResults($searchString, $creds) {
 	define("TITLE_POINTS", 6);
 	define("HEADER_POINTS", 4);
 	define("KEYWORD_POINTS", 5);
+	define("AGE_POINTS", 5);
 	$serverName = "localhost";
 	$dbName = "sasquatch_index";
 	$username = $creds['username'];
 	$password = $creds['password'];
-	$extraPoints = TITLE_POINTS + HEADER_POINTS + KEYWORD_POINTS -4;
+	$extraPoints = TITLE_POINTS + HEADER_POINTS + KEYWORD_POINTS + AGE_POINTS - 4;
 
 	// Create db connection
 	$conn = mysqli_connect($serverName, $username, $password, $dbName);
@@ -98,7 +99,7 @@ function getResults($searchString, $creds) {
 	
 	// Calculate the TF-IDF for each document
 	$tfidf = array();
-	$sql = "SELECT id, url, keywords, title, description, headers, paragraphs, lists FROM sites";
+	$sql = "SELECT id, url, last_visited, keywords, title, description, headers, paragraphs, lists FROM sites";
 	$result = mysqli_query($conn, $sql);
 	while ($row = mysqli_fetch_assoc($result)) {
 		$tfidfScore = 0;
@@ -122,6 +123,24 @@ function getResults($searchString, $creds) {
 			// Give extra points if the token appears in the keywords. 
 			if (stripos(strtolower($row['keywords']), strtolower(trim($token))) !== false) {
 				$tfidfScore += KEYWORD_POINTS; // Extra points
+			}
+
+			// Give extra points if the result age is young. 
+			if ($row['last_visited'] !== false) {
+				$timeStamp = strtotime(date('Y-m-d H:i:s'));
+				$foundTime = strtotime($row['last_visited']);
+				$timeDiff = $timeStamp - $foundTime;
+				$days = $timeDiff / 86400;
+
+				if ($days < 7) {
+					$tfidfScore += AGE_POINTS;
+				} elseif ($days < 14) {
+					$tfidfScore += (AGE_POINTS / 2);
+				} elseif ($days < 30) {
+					$tfidfScore += (AGE_POINTS / 3);
+				} elseif ($days < 365) {
+					$tfidfScore += (AGE_POINTS / 5);
+				}
 			}
 		}
 		$tfidf[$row['url']] = $tfidfScore;
