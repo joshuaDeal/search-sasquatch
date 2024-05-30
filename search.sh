@@ -3,6 +3,15 @@
 # Input search string.
 # Output Results.
 
+printHelp() {
+	echo "$0"
+	echo "Usage:  $0 --[option"
+	echo "Options:"
+	echo "	--help			Display this help message."
+	echo "	--credentials-file	Specify what file contains the database credentials"
+	echo "	--key-file		Specify what file contains the database credentials key"
+}
+
 evalArguments() {
 	arguments=("$@")
 
