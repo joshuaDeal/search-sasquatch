@@ -16,6 +16,12 @@ evalArguments() {
 	arguments=("$@")
 
 	for ((i=0;i<${#arguments[@]};i++)); do
+		# Print help message
+		if [ "${arguments[i]}" == "--help" ] || [ "${arguments[i]}" == "-h" ]; then
+			printHelp
+			exit
+		fi
+
 		# Set database credentials file.
 		if [ "${arguments[i]}" == "--credentials-file" ] || [ "${arguments[i]}" == "-c" ]; then
 			if [ $((i + 1 )) -lt ${#arguments[@]} ]; then
