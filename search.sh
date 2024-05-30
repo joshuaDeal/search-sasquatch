@@ -41,6 +41,31 @@ evalArguments() {
 				exit
 			fi
 		fi
+
+		# Get search string
+		if [ "${arguments[i]}" == "--search-string" ] || [ "${arguments[i]}" == "-s" ]; then
+			if [ $((i + 1 )) -lt ${#arguments[@]} ]; then
+				if [ $i -eq $(( ${#arguments[@]} - 1 )) ]; then
+					echo "Error: No string was provided for ${arguments[i]}" >&2
+					exit
+				fi
+
+				searchString=""
+				while [[ ${arguments[i+1]} != "--"* && ${arguments[i+1]} != "-"* ]]; do
+					searchString+=" ${arguments[i+1]}"
+					((i++))
+
+					if [ $i -eq $(( ${#arguments[@]} - 1 )) ]; then
+						break
+					fi
+				done
+				searchString="${searchString#" "}"
+				echo "Search String: $searchString"
+			else
+				echo "Error: No string was provided for ${arguments[i]}" >&2
+				exit
+			fi
+		fi
 	done
 }
 
@@ -52,8 +77,8 @@ getMySqlCreds() {
 
 	output=()
 
-	gpgCmd="gpg --decrypt --batch --passphrase-file $keyFile $credsFile"
-	gpgOutput=`$gpgCmd`
+	gpgCmd="gpg --decrypt --batch --passphrase-file $keyFile $credsFile 2> /dev/null" 
+	gpgOutput=$(eval $gpgCmd)
 
 	if [ $? -ne 0 ]; then
 		echo "Error: Failed to decrypt file." >&2
