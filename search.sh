@@ -7,9 +7,10 @@ printHelp() {
 	echo "$0"
 	echo "Usage:  $0 --[option]"
 	echo "Options:"
-	echo "	--help			Display this help message."
-	echo "	--credentials-file	Specify what file contains the database credentials"
-	echo "	--key-file		Specify what file contains the database credentials key"
+	echo "	--help						Display this help message."
+	echo "	--credentials-file <path to file>		Specify what file contains the database credentials."
+	echo "	--key-file <path to file>			Specify what file contains the database credentials key."
+	echo "	--search-string \"search string text\"		Specify the search string."
 }
 
 evalArguments() {
