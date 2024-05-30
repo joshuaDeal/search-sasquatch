@@ -52,9 +52,10 @@ getMySqlCreds() {
 }
 
 main() {
+	# Evaluate command line arguments.
 	evalArguments $@
 
-	echo hello!
+	# Get credentials for database
 	creds=($(getMySqlCreds $1 $2))
 
 	echo "${creds[0]}:${creds[1]}"
