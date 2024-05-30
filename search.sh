@@ -11,6 +11,8 @@ printHelp() {
 	echo "	--credentials-file <path to file>		Specify what file contains the database credentials."
 	echo "	--key-file <path to file>			Specify what file contains the database credentials key."
 	echo "	--search-string \"search string text\"		Specify the search string."
+	echo "	--results-per-page <number>			Specify the number of result to load per each page."
+	echo "	--page <number>					Specify what page to load the results for."
 }
 
 evalArguments() {
@@ -64,6 +66,27 @@ evalArguments() {
 				echo "Search String: $searchString"
 			else
 				echo "Error: No string was provided for ${arguments[i]}" >&2
+				exit
+			fi
+		fi
+
+		# Set results per page.
+		if [ "${arguments[i]}" == "--results-per-page" ] || [ "${arguments[i]}" == "-r" ]; then
+			if [ $((i + 1 )) -lt ${#arguments[@]} ]; then
+				resultsPerPage="${arguments[i+ 1]}"
+			else
+				echo "Error: No file path was provided for ${arguments[i]}" >&2
+				exit
+			fi
+		fi
+
+		# Set page number.
+		if [ "${arguments[i]}" == "---page" ] || [ "${arguments[i]}" == "-p" ]; then
+			if [ $((i + 1 )) -lt ${#arguments[@]} ]; then
+				pageNumber="${arguments[i+ 1]}"
+				echo $pageNumber
+			else
+				echo "Error: No file path was provided for ${arguments[i]}" >&2
 				exit
 			fi
 		fi
