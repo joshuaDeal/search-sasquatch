@@ -84,7 +84,6 @@ evalArguments() {
 		if [ "${arguments[i]}" == "---page" ] || [ "${arguments[i]}" == "-p" ]; then
 			if [ $((i + 1 )) -lt ${#arguments[@]} ]; then
 				pageNumber="${arguments[i+ 1]}"
-				echo $pageNumber
 			else
 				echo "Error: No file path was provided for ${arguments[i]}" >&2
 				exit
