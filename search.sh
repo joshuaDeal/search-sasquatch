@@ -92,6 +92,10 @@ getMySqlCreds() {
 	echo ${output[@]}
 }
 
+preformSearch () {
+	:
+}
+
 main() {
 	# Evaluate command line arguments.
 	evalArguments $@
