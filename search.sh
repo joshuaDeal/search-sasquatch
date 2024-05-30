@@ -123,7 +123,7 @@ main() {
 	evalArguments $@
 
 	# Get credentials for database
-	creds=($(getMySqlCreds $1 $2))
+	creds=($(getMySqlCreds))
 
 	echo "${creds[0]}:${creds[1]}"
 }
