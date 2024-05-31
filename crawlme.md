@@ -34,6 +34,11 @@ Here are some potentially useful sites to start the crawler on.
    - Booking.com
    - Expedia.com
    - AirBnB.com
+   - NomadicMatt.com
+   - ThePointsGuy.com
+   - TravelChannel.com
+   - RickSteves.com
+   - LonelyPlanet.com/destinations
 
 6. Science:
    - ScientificAmerican.com
@@ -48,6 +53,16 @@ Here are some potentially useful sites to start the crawler on.
    - StyleCaster.com
    - TheCut.com
    - WhoWhatWear.com
+   - VogueRunway.com
+   - FashionWeekDaily.com
+   - Style.com
+   - Lyst.com
+   - WWD.com
+   - Glamour.com
+   - Allure.com
+   - Fashionista.com
+   - Temptalia.com
+   - TheBeautyDepartment.com
 
 8. Music:
    - Billboard.com
@@ -55,6 +70,11 @@ Here are some potentially useful sites to start the crawler on.
    - RollingStone.com
    - NME.com (New Musical Express)
    - Stereogum.com
+   - ResidentAdvisor.net
+   - MixMag.com
+   - DJMag.com
+   - Beatport.com
+   - XLR8R.com
 
 9. Art and Design:
    - Artsy.net
@@ -62,6 +82,11 @@ Here are some potentially useful sites to start the crawler on.
    - CreativeBloq.com
    - MyModernMet.com
    - ColossalArt.com
+   - CraftGawker.com
+   - DIYProjects.com
+   - Craftster.org
+   - TheCraftsGallery.com
+   - CraftFoxes.com
 
 10. Film and TV:
     - IMDb.com
@@ -83,6 +108,11 @@ Here are some potentially useful sites to start the crawler on.
     - DIYNetwork.com
     - TheSpruce.com
     - BobVila.com
+    - ElleDecor.com
+    - ArchitecturalDigest.com
+    - HouseBeautiful.com
+    - Dwell.com
+    - ApartmentTherapy.com/interiors
 
 13. Gardening:
     - GardenersWorld.com
@@ -97,6 +127,11 @@ Here are some potentially useful sites to start the crawler on.
     - TherapistAid.com
     - PsyCom.net
     - HelpGuide.org
+    - Headspace.com
+    - Calm.com
+    - Mindful.org
+    - TheMighty.com
+    - TinyBuddha.com
 
 15. Business and Entrepreneurship:
     - Forbes.com
@@ -104,6 +139,11 @@ Here are some potentially useful sites to start the crawler on.
     - BusinessInsider.com
     - Inc.com
     - FastCompany.com
+    - TheBalance.com
+    - NerdWallet.com
+    - Kiplinger.com
+    - Bankrate.com
+    - Investopedia.com
 
 16. Environment and Sustainability:
     - Earth911.com
@@ -146,6 +186,11 @@ Here are some potentially useful sites to start the crawler on.
     - Men'sHealth.com/fitness
     - Women'sHealthMag.com/fitness
     - MuscleAndFitness.com
+    - CrossFit.com
+    - MensFitness.com/crossfit
+    - WomensHealthMag.com/fitness/crossfit
+    - TheBoxMag.com
+    - CrossFitJournal.com
 
 22. Automotive:
     - CarAndDriver.com
@@ -153,6 +198,11 @@ Here are some potentially useful sites to start the crawler on.
     - AutoBlog.com
     - Edmunds.com
     - RoadAndTrack.com
+    - TopGear.com
+    - DuPontRegistry.com
+    - LuxuryCarsMagazine.com
+    - RobbReport.com/Automobiles
+    - LuxuryCarsBlog.com
 
 23. Pets:
     - PetMD.com
@@ -181,6 +231,34 @@ Here are some potentially useful sites to start the crawler on.
     - kotaku.com
     - metacritic.com
     - gameinformer.com
+
+27. Anime/Manga:
+   - MyAnimeList.net
+   - Crunchyroll.com
+   - AnimeNewsNetwork.com
+   - Funimation.com
+   - MangaUpdates.com
+
+28. Tabletop Games:
+   - Wizards.com
+   - Paizo.com
+   - BoardGameGeek.com
+   - DungeonMasterGuild.com
+   - TabletopGaming.co.uk
+
+37. Comic Books and Graphic Novels:
+   - Marvel.com
+   - DCComics.com
+   - ImageComics.com
+   - ComicBookResources.com
+   - Newsarama.com
+
+38. Sustainable Living:
+   - TreeHugger.com
+   - Grist.org
+   - TheGuardian.com/environment
+   - MotherEarthNews.com
+   - SustainableLivingReport.com
 
 Additionally, sites that aggregate links.
 - Reddit.com
