@@ -132,6 +132,7 @@ preformSearch() {
 	AGE_POINTS=5
 	serverName="localhost"
 	dbName="sasquatch_index"
+	conn="mariadb -u $username -p$password -h $serverName $dbName"
 	extraPoints=$(($TITLE_POINTS + $HEADER_POINTS + $KEYWORD_POINTS + AGE_POINTS - 4))
 
 	# Tokenize the search string.
@@ -156,7 +157,23 @@ preformSearch() {
 	#	echo "$key:${searchTermFrequency[$key]}"
 	#done
 
-	# Calculate the (IDF) for each token.
+	# Calculate the Inverse Document Frequency (IDF) for each token.
+	declare -A idf
+
+	for token in "${searchTokens[@]}"; do
+		sql="SELECT COUNT(DISTINCT id) AS document_count FROM sites WHERE LOWER(keywords) LIKE LOWER('%$token%') OR LOWER(title) LIKE LOWER('%$token%') OR LOWER(description) LIKE LOWER('%$token%') OR LOWER(headers) LIKE LOWER('%$token%') OR LOWER(paragraphs) LIKE LOWER('%$token%') OR LOWER(lists) LIKE LOWER('%$token%')"
+	
+		result=$(echo $sql | $conn)
+
+		documentCount=$(echo $result | awk '{print $2}')
+
+		idf[$token]=$documentCount
+	done
+
+	# Print the IDF
+	for token in "${searchTokens[@]}"; do
+		echo "Token: $token, IDF: ${idf[$token]}"
+	done
 }
 
 main() {
