@@ -119,14 +119,17 @@ def preformSearch(searchString, creds):
 
 				# Give extra points if the token appears in the title.
 				if token in title:
+					#print("Title points awarded")
 					tfidfScore += TITLE_POINTS
 
 				# Give extra points if the token appears in the header text.
 				if token in headers:
+					#print("Header points awarded")
 					tfidfScore += HEADER_POINTS
 
 				# Give extra points if the token appears in the keywords.
 				if token in keywords:
+					#print("Keyword points awarded")
 					tfidfScore += KEYWORD_POINTS
 
 				# Give extra points if the result age is young.
@@ -137,13 +140,17 @@ def preformSearch(searchString, creds):
 					days = timeDiff / 86400
 
 					if days < 7:
+						#print("7 days age points awarded")
 						tfidfScore += AGE_POINTS
 					elif days < 14:
-						tfidfScore += AGE_POINTS / 2
+						#print("14 days age points awarded")
+						tfidfScore += (AGE_POINTS / 2)
 					elif days < 30:
-						tfidfScore += AGE_POINTS / 3
+						#print("30 days age points awarded")
+						tfidfScore += (AGE_POINTS / 3)
 					elif days < 365:
-						tfidfScore += AGE_POINTS / 5
+						#print("1 year age points awarded")
+						tfidfScore += (AGE_POINTS / 5)
 
 			tfidf[db_id] = tfidfScore
 			#for key, value in tfidf.items():
@@ -165,12 +172,14 @@ def preformSearch(searchString, creds):
 	return sortedResults
 
 def printResults(results, resultsPerPage, page):
-	pass
+	for db_id, rank in results.items():
+		print(f"{db_id}: {rank}")
 
 def main():
 	# Some default values.
-	argument['pageNumber'] = 1
-	argument['resultsPerPage'] = 0
+	arguments={}
+	arguments['pageNumber'] = 1
+	arguments['resultsPerPage'] = 0
 
 	arguments = evalArguments()
 	creds = getMySqlCreds(arguments['credsFile'],arguments['keyFile'])
