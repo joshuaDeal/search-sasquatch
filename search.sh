@@ -63,7 +63,6 @@ evalArguments() {
 					fi
 				done
 				searchString="${searchString#" "}"
-				echo "Search String: $searchString"
 			else
 				echo "Error: No string was provided for ${arguments[i]}" >&2
 				exit
@@ -98,8 +97,6 @@ getMySqlCreds() {
 		exit
 	fi
 
-	output=()
-
 	gpgCmd="gpg --decrypt --batch --passphrase-file $keyFile $credsFile 2> /dev/null" 
 	gpgOutput=$(eval $gpgCmd)
 
@@ -107,15 +104,59 @@ getMySqlCreds() {
 		echo "Error: Failed to decrypt file." >&2
 		exit
 	else
-		output+=("$(echo $gpgOutput | cut -d ":" -f 1)")
-		output+=("$(echo $gpgOutput | cut -d ":" -f 2)")
+		username=("$(echo $gpgOutput | cut -d ":" -f 1)")
+		password=("$(echo $gpgOutput | cut -d ":" -f 2)")
 	fi
-
-	echo ${output[@]}
 }
 
-preformSearch () {
-	:
+arrayCountValues() {
+	input=("$@")
+
+	declare -A valueCounts
+
+	# Count the occurrences of each value
+	for value in "${input[@]}"; do
+		(( valueCounts[$value]++ ))
+	done
+
+	# Print the associative array
+	for key in "${!valueCounts[@]}"; do
+		echo "$key:${valueCounts[$key]}"
+	done
+}
+
+preformSearch() {
+	TITLE_POINTS=6
+	HEADER_POINTS=4
+	KEYWORD_POINTS=5
+	AGE_POINTS=5
+	serverName="localhost"
+	dbName="sasquatch_index"
+	extraPoints=$(($TITLE_POINTS + $HEADER_POINTS + $KEYWORD_POINTS + AGE_POINTS - 4))
+
+	# Tokenize the search string.
+	# Note that this regex removes all non alphanumeric characters (excluding spaces). Consider if Replacing such characters with spaces rather than removing them would be a better option.
+	cleanString=$(echo "$searchString" | tr -cd '[:alnum:] [:space:]' | tr '[:upper:]' '[:lower:]')
+	searchTokens=()
+	while read -r -d ' ' term; do
+		searchTokens+=(" $term ")
+	done <<< "$cleanString "
+
+	# Calculate the Term Frequency (TF) for each token.
+	declare -A searchTermFrequency
+
+	while read -r line; do
+		key=${line%:*}
+		value=${line#*:}
+		searchTermFrequency[$key]=$value
+	done < <(arrayCountValues ${searchTokens[@]})
+
+	# Print out searchTermFrequency
+	#for key in "${!searchTermFrequency[@]}"; do
+	#	echo "$key:${searchTermFrequency[$key]}"
+	#done
+
+	# Calculate the (IDF) for each token.
 }
 
 main() {
@@ -123,9 +164,13 @@ main() {
 	evalArguments $@
 
 	# Get credentials for database
-	creds=($(getMySqlCreds))
+	getMySqlCreds
 
-	echo "${creds[0]}:${creds[1]}"
+	# Preform the search
+	preformSearch
 }
 
 main $@
+
+#myArray=("apple" "banana" "apple" "orange" "banana" "apple")
+#arrayCountValues ${myArray[@]}
