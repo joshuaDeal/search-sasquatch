@@ -164,11 +164,20 @@ def preformSearch(searchString, creds):
 
 	return sortedResults
 
+def printResults(results, resultsPerPage, page):
+	pass
+
 def main():
+	# Some default values.
+	argument['pageNumber'] = 1
+	argument['resultsPerPage'] = 0
+
 	arguments = evalArguments()
 	creds = getMySqlCreds(arguments['credsFile'],arguments['keyFile'])
 
-	print(preformSearch(arguments['searchString'], creds))
+	results = preformSearch(arguments['searchString'], creds)
+
+	printResults(results, arguments['resultsPerPage'], arguments['pageNumber'])
 
 if __name__ == "__main__":
 	main()
