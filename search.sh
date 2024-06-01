@@ -1,4 +1,5 @@
 #!/bin/bash
+#This script is a fucking disaster.
 
 # Input search string.
 # Output Results.
@@ -132,7 +133,7 @@ preformSearch() {
 	AGE_POINTS=5
 	serverName="localhost"
 	dbName="sasquatch_index"
-	conn="mariadb -u $username -p$password -h $serverName $dbName"
+	conn="mariadb -u $username -p$password -h $serverName $dbName --batch --skip-column-names"
 	extraPoints=$(($TITLE_POINTS + $HEADER_POINTS + $KEYWORD_POINTS + AGE_POINTS - 4))
 
 	# Tokenize the search string.
@@ -171,9 +172,67 @@ preformSearch() {
 	done
 
 	# Print the IDF for each term.
-	for token in "${searchTokens[@]}"; do
-		echo "Token: $token, IDF: ${idf[$token]}"
-	done
+	#for token in "${searchTokens[@]}"; do
+	#	echo "Token: $token, IDF: ${idf[$token]}"
+	#done
+
+	# Calculate the TF-IDF score for each document.
+	sql="SELECT id, url, last_visited, keywords, title, description, headers, paragraphs, lists FROM sites"
+	result=$(echo $sql | $conn)
+
+	echo "$result" | head -n 2
+
+	while IFS= read -r -d $'\n' row; do
+		tfidfScore=0
+		
+		# Split row data into an array
+		IFS=$'\t' read -r -a rowArray <<< "${row}"
+		#rowArray=($row)
+
+		for token in "${searchTokens[@]}"; do
+			tf=$(echo "${rowArray[3]} ${rowArray[4]} ${rowArray[5]} ${rowArray[6]} ${rowArray[7]} ${rowArray[8]}" | tr '[:upper:]' '[:lower:]' | grep -o -i "$token" | wc -l)
+			idfValue=${idf[$token]}
+
+			# Calculate TF-IDF score.
+			tfidfScore=$(echo "scale=6; $tf * l((${#results[@]} + 1) / $idfValue) + $tfidfScore" | bc -l)
+			echo "The current item is ${rowArray[0]}, its title is ${rowArray[4]}, and its initial score is $tfidfScore."
+
+			# Give extra points if the token appears in the title.
+			if [[ "${rowArray[4],,}" == *"{$token,,}"* ]]; then
+				tfidfScore=$((tfidfScre + TITLE_POINTS))
+			fi
+
+			# Give extra points if the token appears in the headers.
+			if [[ "${rowArray[6],,}" == *"{$token,,}"* ]]; then
+				tfidfScore=$((tfidfScre + HEADER_POINTS))
+			fi
+
+			# Give extra points if the token appears in the keywords.
+			if [[ "${rowArray[3],,}" == *"{$token,,}"* ]]; then
+				tfidfScore=$((tfidfScre + KEYWORD_POINTS))
+			fi
+	
+			# Give extra points for young age.
+			if [ "${rowArray[2]}" != "false" ]; then
+				timeStamp=$(date +%s)
+				foundTime=$(date -d "${rowArray[2]}" +%s)
+				timeDiff=$((timeStamp - foundTime))
+				days=$((timeDiff / 86400))
+
+				if [ $days -lt 7 ]; then
+					tfidfScore=$(echo "scale=6; $tfidfScore + $AGE_POINTS" | bc)
+				elif [ $days -lt 14 ]; then
+					tfidfScore=$(echo "scale=6; $tfidfScore + $AGE_POINTS / 2" | bc)
+				elif [ $days -lt 30 ]; then
+					tfidfScore=$(echo "scale=6; $tfidfScore + $AGE_POINTS / 3" | bc)
+				elif [ $days -lt 365 ]; then
+					tfidfScore=$(echo "scale=6; $tfidfScore + $AGE_POINTS / 5" | bc)
+				fi
+			fi
+		done
+
+		# Sort documents by TF-IDF
+	done <<< "$result"
 }
 
 main() {
