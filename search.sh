@@ -170,7 +170,7 @@ preformSearch() {
 		idf[$token]=$documentCount
 	done
 
-	# Print the IDF
+	# Print the IDF for each term.
 	for token in "${searchTokens[@]}"; do
 		echo "Token: $token, IDF: ${idf[$token]}"
 	done
