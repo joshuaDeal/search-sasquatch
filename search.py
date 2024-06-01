@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
+import math
 import mysql.connector
+import re
+from datetime import datetime
 from extractor import getMySqlCreds
 
 # Print a helpful message.
@@ -41,6 +44,16 @@ def evalArguments():
 			output['pageNumber'] = sys.argv[i+1]
 	return output
 
+def listCountValues(input):
+	valueCounts = {}
+
+	for value in input:
+		currentCount = valueCounts.get(value, 0)
+
+		valueCounts[value] = currentCount + 1
+
+	return valueCounts
+
 # Takes a search string as input. Returns an array of result id numbers.
 def preformSearch(searchString, creds):
 	TITLE_POINTS = 6
@@ -52,12 +65,96 @@ def preformSearch(searchString, creds):
 	extraPoints = TITLE_POINTS + HEADER_POINTS + KEYWORD_POINTS + AGE_POINTS - 4
 
 	# Tokenize the search string.
+	pattern = r'[^a-zA-Z0-9\s]'
+	cleanString = re.sub(pattern, ' ', searchString)
+	cleanList = cleanString.lower().split()
+	searchTokens = [' ' + token + ' ' for token in cleanList]
+
+	# Calculate the Term Frequency (TF) for each token.
+	searchTermFrequency = listCountValues(searchTokens)
 
 	# Connect to database
 	try:
 		conn = mysql.connector.connect(host=serverName, unix_socket='/var/run/mysqld/mysqld.sock', database=dbName, user=creds['username'], password=creds['password'])
 
 		cursor = conn.cursor()
+
+		# Calculate the Inverse Document Frequency (IDF) for each token.
+		idf={}
+		for token in searchTokens:
+			query = "SELECT COUNT(DISTINCT id) AS document_count FROM sites WHERE LOWER(keywords) LIKE LOWER(%s) OR LOWER(title) LIKE LOWER(%s) OR LOWER(description) LIKE LOWER(%s) OR LOWER(headers) LIKE LOWER(%s) OR LOWER(paragraphs) LIKE LOWER(%s) OR LOWER(lists) LIKE LOWER(%s)"
+			cursor.execute(query, ('%' + token + '%',) * 6)
+			result = cursor.fetchone()[0]
+			idf[token] = result
+
+		# Find number of rows.
+		query = "SELECT COUNT(*) FROM sites"
+		cursor.execute(query)
+		num_rows = cursor.fetchone()[0]
+
+		# Calculate the TF-IDF score for each document.
+		tfidf={}
+		query = "SELECT id, url, last_visited, keywords, title, description, headers, paragraphs, lists FROM sites"
+		cursor.execute(query)
+
+		row = cursor.fetchone()
+		while row:
+			tfidfScore = 0
+			for token in searchTokens:
+				db_id = row[0]
+				keywords = row[3]
+				title = row[4]
+				description = row[5]
+				headers = row[6]
+				paragraphs = row[7]
+				lists = row[8]
+				last_visited = row[2]
+
+				text_to_search = ' '.join([str(val) for val in [keywords, title, description, headers, paragraphs, lists]])
+				tf = text_to_search.lower().count(token.lower())
+				idfValue = idf[token]
+
+				# Calculate TF-IDF score.
+				tfidfScore += tf * math.log((num_rows + 1) / idfValue)
+
+				# Give extra points if the token appears in the title.
+				if token in title:
+					tfidfScore += TITLE_POINTS
+
+				# Give extra points if the token appears in the header text.
+				if token in headers:
+					tfidfScore += HEADER_POINTS
+
+				# Give extra points if the token appears in the keywords.
+				if token in keywords:
+					tfidfScore += KEYWORD_POINTS
+
+				# Give extra points if the result age is young.
+				if last_visited:
+					timeStamp = int(datetime.now().timestamp())
+					foundTime = int(last_visited.timestamp())
+					timeDiff = timeStamp - foundTime
+					days = timeDiff / 86400
+
+					if days < 7:
+						tfidfScore += AGE_POINTS
+					elif days < 14:
+						tfidfScore += AGE_POINTS / 2
+					elif days < 30:
+						tfidfScore += AGE_POINTS / 3
+					elif days < 365:
+						tfidfScore += AGE_POINTS / 5
+
+			tfidf[db_id] = tfidfScore
+			#for key, value in tfidf.items():
+			#	print(f"Key: {key}, Value: {value}")
+			row = cursor.fetchone()
+
+		# Drop any results that are too low
+		cleanResults = {key: value for key, value in tfidf.items() if value > extraPoints}
+
+		# Sort documents by score
+		sortedResults = dict(sorted(cleanResults.items(), key=lambda x : x[1], reverse=True))
 	except mysql.connector.Error as error:
 		print("Error connecting to database: {}".format(error))
 	finally:
@@ -65,11 +162,13 @@ def preformSearch(searchString, creds):
 			cursor.close()
 			conn.close()
 
+	return sortedResults
+
 def main():
 	arguments = evalArguments()
 	creds = getMySqlCreds(arguments['credsFile'],arguments['keyFile'])
 
-	preformSearch(arguments['searchString'], creds)
+	print(preformSearch(arguments['searchString'], creds))
 
 if __name__ == "__main__":
 	main()
