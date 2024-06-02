@@ -171,9 +171,29 @@ def preformSearch(searchString, creds):
 
 	return sortedResults
 
-def printResults(results, resultsPerPage, page):
-	for db_id, rank in results.items():
-		print(f"{db_id}: {rank}")
+def printResults(results, resultsPerPage, page, creds):
+	start_index = (page - 1) * resultsPerPage
+	end_index = page * resultsPerPage if resultsPerPage > 0 else len(results)
+
+	try:
+		conn = mysql.connector.connect(host="localhost", unix_socket="/var/run/mysqld/mysqld.sock", database="sasquatch_index", user=creds['username'], password=creds['password'])
+		cursor = conn.cursor()
+
+		for index, (result_id, score) in enumerate(results.items()):
+			if index >= start_index and index < end_index:
+				query = "SELECT title, url, description FROM sites WHERE id = %s"
+				cursor.execute(query, (result_id,))
+				result = cursor.fetchone()
+				if result:
+					title, url, description = result
+					print(f"{title}\n{url}\n{description}\nResult ID: {result_id}\nScore: {score}\n")
+
+	except mysql.connector.Error as error:
+		print("Error retrieving data from database: {}".format(error))
+	finally:
+		if conn is not None and conn.is_connected():
+			cursor.close()
+			conn.close()
 
 def main():
 	# Some default values.
@@ -186,7 +206,7 @@ def main():
 
 	results = preformSearch(arguments['searchString'], creds)
 
-	printResults(results, arguments['resultsPerPage'], arguments['pageNumber'])
+	printResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
 
 if __name__ == "__main__":
 	main()
