@@ -191,7 +191,7 @@ def printCliResults(results, resultsPerPage, page, creds):
 				result = cursor.fetchone()
 				if result:
 					title, url, description = result
-					print(f"{title}\n{url}\n{description}\nResult ID: {result_id}\nScore: {score}\n")
+					print(f"{title.replace("\n", "")}\n{url}\n{description.replace("\n", "")}\nResult ID: {result_id}\nScore: {score}\n")
 
 	except mysql.connector.Error as error:
 		print("Error retrieving data from database: {}".format(error))
@@ -217,7 +217,7 @@ def printJsonResults(results, resultsPerPage, page, creds):
 				result = cursor.fetchone()
 				if result:
 					title, url, description = result
-					result_data = {"title": title, "url": url, "description": description, "result_id": result_id, "score": score}
+					result_data = {"title": title.replace("\n", ""), "url": url, "description": description.replace("\n", ""), "result_id": result_id, "score": score}
 					output_data["results"].append(result_data)
 
 		print(json.dumps(output_data, indent=2))
