@@ -4,6 +4,7 @@ import sys
 import math
 import mysql.connector
 import re
+import json
 from datetime import datetime
 from extractor import getMySqlCreds
 
@@ -17,6 +18,7 @@ def printHelp():
 	print("\t--search-string \"search string text\"\tSpecify the search string.")
 	print("\t--results-per-page <number>\t\tSpecify the number of results per page.")
 	print("\t--page <number>\t\t\t\tSpecify what page to load.")
+	print("\t--output <format>\t\t\t\tSpecify what format to use in output.")
 
 # Evaluate command line arguments.
 def evalArguments():
@@ -42,6 +44,9 @@ def evalArguments():
 		# Let user set the page number.
 		elif sys.argv[i] == "--page" or sys.argv[i] == "-p":
 			output['pageNumber'] = sys.argv[i+1]
+		# Let user set output mode.
+		elif sys.argv[i] == "--output" or sys.argv[i] == "-o":
+			output['outputMode'] = sys.argv[i+1]
 	return output
 
 def listCountValues(input):
@@ -171,7 +176,7 @@ def preformSearch(searchString, creds):
 
 	return sortedResults
 
-def printResults(results, resultsPerPage, page, creds):
+def printCliResults(results, resultsPerPage, page, creds):
 	start_index = (page - 1) * resultsPerPage
 	end_index = page * resultsPerPage if resultsPerPage > 0 else len(results)
 
@@ -195,18 +200,51 @@ def printResults(results, resultsPerPage, page, creds):
 			cursor.close()
 			conn.close()
 
+def printJsonResults(results, resultsPerPage, page, creds):
+	start_index = (page - 1) * resultsPerPage
+	end_index = page * resultsPerPage if resultsPerPage > 0 else len(results)
+
+	try:
+		conn = mysql.connector.connect(host="localhost", unix_socket="/var/run/mysqld/mysqld.sock", database="sasquatch_index", user=creds['username'], password=creds['password'])
+		cursor = conn.cursor()
+
+		output_data = {"results": []}
+
+		for index, (result_id, score) in enumerate(results.items()):
+			if index >= start_index and index < end_index:
+				query = "SELECT title, url, description FROM sites WHERE id = %s"
+				cursor.execute(query, (result_id,))
+				result = cursor.fetchone()
+				if result:
+					title, url, description = result
+					result_data = {"title": title, "url": url, "description": description, "result_id": result_id, "score": score}
+					output_data["results"].append(result_data)
+
+		print(json.dumps(output_data, indent=2))
+
+	except mysql.connector.Error as error:
+		print("Error retrieving data from database: {}".format(error))
+	finally:
+		if conn is not None and conn.is_connected():
+			cursor.close()
+			conn.close()
+
 def main():
 	# Some default values.
 	arguments={}
 	arguments['pageNumber'] = 1
 	arguments['resultsPerPage'] = 0
+	arguments['outputMode'] = 'cli'
 
 	arguments = evalArguments()
 	creds = getMySqlCreds(arguments['credsFile'],arguments['keyFile'])
 
 	results = preformSearch(arguments['searchString'], creds)
 
-	printResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
+	if arguments['outputMode'] == 'cli':
+		printCliResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
+	elif arguments['outputMode'] == 'json':
+		printJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
 
 if __name__ == "__main__":
 	main()
