@@ -173,7 +173,7 @@ def getMySqlCreds(fileName,keyFile):
 
 	# Try and decrypt the creds file
 	try:
-		decryptedData = subprocess.check_output(gpgCommand).decode('utf-8').strip()
+		decryptedData = subprocess.check_output(gpgCommand, stderr=subprocess.DEVNULL).decode('utf-8').strip()
 		username, password = decryptedData.split(':')
 		credentials['username'] = username
 		credentials['password'] = password
