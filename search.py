@@ -22,7 +22,11 @@ def printHelp():
 
 # Evaluate command line arguments.
 def evalArguments():
+	# Some default values.
 	output = {}
+	output['pageNumber'] = 1
+	output['resultsPerPage'] = 0
+	output['outputMode'] = 'cli'
 
 	for i in range(len(sys.argv)):
 		# Print help message.
@@ -230,12 +234,6 @@ def printJsonResults(results, resultsPerPage, page, creds):
 			conn.close()
 
 def main():
-	# Some default values.
-	arguments={}
-	arguments['pageNumber'] = 1
-	arguments['resultsPerPage'] = 0
-	arguments['outputMode'] = 'cli'
-
 	arguments = evalArguments()
 	creds = getMySqlCreds(arguments['credsFile'],arguments['keyFile'])
 
