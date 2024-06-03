@@ -14,7 +14,7 @@ function printSite($searchString, $creds) {
 	echo "	</head>\n";
 	echo "	<body>\n";
 	echo "		<header id=\"search\">\n";
-	echo "			<pre>";
+	echo "			<pre>\n";
 	echo " ____                              _       _       ____                      _     \n";
 	echo "/ ___|  __ _ ___  __ _ _   _  __ _| |_ ___| |__   / ___|  ___  __ _ _ __ ___| |__  \n";
 	echo "\___ \ / _` / __|/ _` | | | |/ _` | __/ __| '_ \  \___ \ / _ \/ _` | '__/ __| '_ \ \n";
