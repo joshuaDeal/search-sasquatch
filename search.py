@@ -219,7 +219,10 @@ def printJsonResults(results, resultsPerPage, page, creds):
 		conn = mysql.connector.connect(host="localhost", unix_socket="/var/run/mysqld/mysqld.sock", database="sasquatch_index", user=creds['username'], password=creds['password'])
 		cursor = conn.cursor()
 
-		output_data = {"results": []}
+		total_results = len(results)
+		total_pages = math.ceil(total_results / resultsPerPage)
+
+		output_data = {"total_results": total_results, "total_pages": total_pages, "results": []}
 
 		for index, (result_id, score) in enumerate(results.items()):
 			if index >= start_index and index < end_index:
@@ -234,7 +237,8 @@ def printJsonResults(results, resultsPerPage, page, creds):
 						result_data = {"title": title.replace("\n", ""), "url": url, "description": paragraphs.replace("\n", ""), "result_id": result_id, "score": score}
 					output_data["results"].append(result_data)
 
-		print(json.dumps(output_data, indent=2))
+		json_output = json.dumps(output_data, indent=2, ensure_ascii=False)
+		print(json_output)
 
 	except mysql.connector.Error as error:
 		print("Error retrieving data from database: {}".format(error))
