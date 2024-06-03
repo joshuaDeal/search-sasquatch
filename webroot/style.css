@@ -83,6 +83,14 @@ p {
 	border-radius: 5px;
 }
 
+#current-page {
+	background-color: #c7aa05;
+}
+
+#current-page:hover {
+	background-color: #e0bf06;
+}
+
 @media (max-width: 666px) {
 	pre {
 		font-size: 5px;

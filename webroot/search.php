@@ -65,12 +65,20 @@ function printResults($searchString) {
 		}
 		if ($data['total_pages'] < 10) {
 			for ($i = 1; $i <= $data['total_pages']; $i++) {
-				echo "<a href='?q=$searchString&page=$i'><button>$i</button></a> ";
+				if ($i != $currentPage) {
+					echo "<a href='?q=$searchString&page=$i'><button>$i</button></a> ";
+				} else {
+					echo "<a href='?q=$searchString&page=$i'><button id='current-page'>$i</button></a> ";
+				}
 			}
 		} else {
 			for ($i = ($currentPage - 4); $i <= $currentPage + 4; $i++) {
 				if($i > 0 && $i <= $data['total_pages']) {
-					echo "<a href='?q=$searchString&page=$i'><button>$i</button></a> ";
+					if ($i != $currentPage) {
+						echo "<a href='?q=$searchString&page=$i'><button>$i</button></a> ";
+					} else {
+						echo "<a href='?q=$searchString&page=$i'><button id='current-page'>$i</button></a> ";
+					}
 				}
 			}
 		}
