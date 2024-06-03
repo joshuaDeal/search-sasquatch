@@ -184,6 +184,10 @@ def printCliResults(results, resultsPerPage, page, creds):
 	start_index = (page - 1) * resultsPerPage
 	end_index = page * resultsPerPage if resultsPerPage > 0 else len(results)
 
+	print("Total results:", len(results))
+	print("Pages:", math.ceil(len(results) / resultsPerPage))
+	print()
+
 	try:
 		conn = mysql.connector.connect(host="localhost", unix_socket="/var/run/mysqld/mysqld.sock", database="sasquatch_index", user=creds['username'], password=creds['password'])
 		cursor = conn.cursor()
