@@ -190,12 +190,15 @@ def printCliResults(results, resultsPerPage, page, creds):
 
 		for index, (result_id, score) in enumerate(results.items()):
 			if index >= start_index and index < end_index:
-				query = "SELECT title, url, description FROM sites WHERE id = %s"
+				query = "SELECT title, url, description, paragraphs FROM sites WHERE id = %s"
 				cursor.execute(query, (result_id,))
 				result = cursor.fetchone()
 				if result:
-					title, url, description = result
-					print(f"{title.replace("\n", "")}\n{url}\n{description.replace("\n", "")}\nResult ID: {result_id}\nScore: {score}\n")
+					title, url, description, paragraphs = result
+					if description != "No description provided.":
+						print(f"{title.replace("\n", "")}\n{url}\n{description.replace("\n", "")}\nResult ID: {result_id}\nScore: {score}\n")
+					else:
+						print(f"{title.replace("\n", "")}\n{url}\n{paragraphs.replace("\n", "")}\nResult ID: {result_id}\nScore: {score}\n")
 
 	except mysql.connector.Error as error:
 		print("Error retrieving data from database: {}".format(error))
@@ -216,12 +219,15 @@ def printJsonResults(results, resultsPerPage, page, creds):
 
 		for index, (result_id, score) in enumerate(results.items()):
 			if index >= start_index and index < end_index:
-				query = "SELECT title, url, description FROM sites WHERE id = %s"
+				query = "SELECT title, url, description, paragraphs FROM sites WHERE id = %s"
 				cursor.execute(query, (result_id,))
 				result = cursor.fetchone()
 				if result:
-					title, url, description = result
-					result_data = {"title": title.replace("\n", ""), "url": url, "description": description.replace("\n", ""), "result_id": result_id, "score": score}
+					title, url, description, paragraphs = result
+					if description != "No description provided.":
+						result_data = {"title": title.replace("\n", ""), "url": url, "description": description.replace("\n", ""), "result_id": result_id, "score": score}
+					else:
+						result_data = {"title": title.replace("\n", ""), "url": url, "description": paragraphs.replace("\n", ""), "result_id": result_id, "score": score}
 					output_data["results"].append(result_data)
 
 		print(json.dumps(output_data, indent=2))
