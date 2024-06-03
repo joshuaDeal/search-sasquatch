@@ -10,7 +10,10 @@ header {
 	background-color: #3c3836;
 	color: #ebdbb2;
 	text-align: center;
-	padding: 20px;
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #504945;
+	border-radius: 5px;
 }
 
 form {
