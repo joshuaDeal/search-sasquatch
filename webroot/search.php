@@ -36,8 +36,11 @@ function printSite($searchString, $creds) {
 }
 
 function printResults($searchString) {
+	$resultsPerPage = 20;
+	$currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
 	// Preform the search.
-	$cmd = "../search.py -s '$searchString' -o 'json' -r 4 -c ../db_creds.gpg -k ../decryption_key.txt";
+	$cmd = "/opt/privatefiles/search.py -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/privatefiles/db_creds.gpg -k /opt/privatefiles/decryption_key.txt";
 	$output = shell_exec($cmd);
 
 	// Decode the json output.
@@ -54,8 +57,18 @@ function printResults($searchString) {
 			echo "	<p>Score: " . $result['score'] . "</p>\n";
 			echo "</div>\n";
 		}
+
+		// Print pagination links.
+		echo "<div id='pagination'>\n";
+		if ($currentPage > 1) {
+			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "'>Previous</a> ";
+		}
+		echo " | ";
+		echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "'>Next</a>";
+		echo "</div>\n";
 	} else {
 		echo "No results found\n";
+		echo $output;
 	}
 }
 
