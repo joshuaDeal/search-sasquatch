@@ -46,6 +46,14 @@ button:hover {
 }
 
 footer {
+	bottom: 0;
+	background-color: #3c3836;
+	color: #ebdbb2;
+	text-align: center;
+	padding: 10px;
+}
+
+#index {
 	position: fixed;
 	bottom: 0;
 	width: 100%;

@@ -31,6 +31,9 @@ function printSite($searchString, $creds) {
 	echo "		</header>\n";
 	// Start of results
 	printResults($searchString);
+	echo "		<footer>";
+	echo "			<p><a href='https://github.com/joshuadeal/search-sasquatch'>GitHub</a></p>";
+	echo "		</footer>";
 	echo "	</body>\n";
 	echo "</html>\n";
 }
