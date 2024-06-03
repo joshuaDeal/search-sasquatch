@@ -45,6 +45,25 @@ button:hover {
 	background-color: #8ec07c;
 }
 
+footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background-color: #3c3836;
+	color: #ebdbb2;
+	text-align: center;
+	padding: 10px;
+}
+
+footer a {
+	color: #a8a8a8;
+	text-decoration: none;
+}
+
+footer a:hover {
+	color: #7c7c7c;
+}
+
 #result {
 	background-color: #3c3836;
 	color: #ebdbb2;
