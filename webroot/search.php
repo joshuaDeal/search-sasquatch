@@ -61,10 +61,10 @@ function printResults($searchString) {
 		// Print pagination links.
 		echo "<div id='pagination'>\n";
 		if ($currentPage > 1) {
-			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "'>Previous</a> ";
+			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "'><button>Previous</button></a> ";
 		}
 		echo " | ";
-		echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "'>Next</a>";
+		echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "'><button>>Next</button></a>";
 		echo "</div>\n";
 	} else {
 		echo "No results found\n";

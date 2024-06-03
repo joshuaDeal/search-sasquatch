@@ -70,6 +70,16 @@ p {
 	text-overflow: ellipsis;
 }
 
+#pagination {
+	text-align: center;
+	background-color: #3c3836;
+	color: #ebdbb2;
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #504945;
+	border-radius: 5px;
+}
+
 @media (max-width: 666px) {
 	pre {
 		font-size: 5px;
