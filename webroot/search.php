@@ -61,6 +61,7 @@ function printResults($searchString) {
 		// Print pagination links.
 		echo "<div id='pagination'>\n";
 		if ($currentPage > 1) {
+			echo "<a href='?q=$searchString&page=" . 1 . "'><button><<</button></a> ";
 			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "'><button>Previous</button></a> ";
 		}
 		if ($data['total_pages'] < 10) {
@@ -84,6 +85,7 @@ function printResults($searchString) {
 		}
 		if ($currentPage < $data['total_pages']) {
 			echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "'><button>Next</button></a>";
+			echo "<a href='?q=$searchString&page=" . $data['total_pages'] . "'><button>>></button></a> ";
 		}
 		echo "</div>\n";
 	} else {
