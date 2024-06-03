@@ -63,8 +63,12 @@ function printResults($searchString) {
 		if ($currentPage > 1) {
 			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "'><button>Previous</button></a> ";
 		}
-		echo " | ";
-		echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "'><button>>Next</button></a>";
+		for ($i = 1; $i <= $data['total_pages']; $i++) {
+			echo "<a href='?q=$searchString&page=$i'><button>$i</button></a> ";
+		}
+		if ($currentPage < $data['total_pages']) {
+			echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "'><button>>Next</button></a>";
+		}
 		echo "</div>\n";
 	} else {
 		echo "No results found\n";
