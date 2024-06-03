@@ -101,6 +101,17 @@ main(){
 	# Add cron job to run purge.sh.
 	(crontab -l ; echo "0 0 * * * `pwd`/purge.sh") | crontab -
 	(crontab -l ; echo "0 12 * * * `pwd`/purge.sh") | crontab -
+
+	# Create directory /opt/search-sasquatch/
+	webUser=$(ps aux | grep nginx | grep -v grep | grep -v root | awk '{print $1}')
+	mkdir /opt/search-sasquatch
+	cp ./*.{py,gpg,txt} /opt/search-sasquatch/
+	chown :$webUser /opt/search-sasquatch
+	chown :$webUser /opt/search-sasquatch/*
+	chmod g=r /opt/search-sasquatch/*
+	chmod g+x /opt/search-sasquatch/*.py
+	chmod g-w /opt/search-sasquatch/*.py
+	chmod o-xw /opt/search-sasquatch/*.py
 }
 
 main $@
