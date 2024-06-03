@@ -43,7 +43,7 @@ function printResults($searchString) {
 	$currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
 
 	// Preform the search.
-	$cmd = "/opt/privatefiles/search.py -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/privatefiles/db_creds.gpg -k /opt/privatefiles/decryption_key.txt";
+	$cmd = "/opt/search-sasquatch/search.py -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
 	$output = shell_exec($cmd);
 
 	// Decode the json output.
