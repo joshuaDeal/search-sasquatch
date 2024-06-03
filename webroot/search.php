@@ -1,26 +1,5 @@
 <?php
 
-// Read MySql username and password from a file.
-function getMySqlCreds($fileName, $keyFile) {
-	$credentials = array();
-
-	// Construct gpg command for decryption
-	$gpgCommand = "sudo /sbin/gpg --decrypt --batch --passphrase-file $keyFile $fileName";
-
-	// Try and decrypt the creds file
-	exec($gpgCommand, $output, $returnCode);
-	if ($returnCode === 0) {
-			$decryptedData = implode("\n", $output);
-			list($username, $password) = explode(':', $decryptedData);
-			$credentials['username'] = $username;
-			$credentials['password'] = $password;
-			return $credentials;
-	} else {
-			echo "Error decrypting file\n";
-			return null;
-	}
-}
-
 // Outputs html for webpage.
 function printSite($searchString, $creds) {
 	echo "<!DOCTYPE html>\n";
