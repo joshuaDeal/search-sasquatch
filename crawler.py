@@ -2,9 +2,10 @@
 
 # A webcrawler. It start with a list of root pages and parses each pages's html for new urls to parse. It outputs the urls it discovers to a text file called "raw-urls.txt"
 
-from bs4 import BeautifulSoup
 import requests
 import sys
+import re
+from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from urllib.parse import urlparse
 from collections import deque
@@ -95,6 +96,9 @@ def main():
 	
 	# Set to store visited URLs to avoid duplicates
 	visited_urls = set()
+
+	# Regex pattern for fragment identifiers.
+	fragmentPat = r'#.*$'
 	
 	while url_queue:
 		# Get the next URL to crawl
@@ -109,7 +113,7 @@ def main():
 				new_urls = getUrls(html_content, current_url)
 				for url in new_urls:
 					# Avoid revisiting already processed URLs
-					if url not in visited_urls:
+					if url not in visited_urls and not re.search(fragmentPat, url):
 						# Add new URLs to the queue
 						url_queue.append(url)
 						# Add newly discovered urls to urls file.
