@@ -19,5 +19,5 @@ Preforms a TF-IDF based search against the database. Run `search.py --help` for 
 ## webroot/
 Directory containing source files for website user interface / front end.
 
-### search.php
+### results.php
 Outputs a results page.

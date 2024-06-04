@@ -4,6 +4,6 @@
 	<Description>An internet search engine written mostly in python. Currently TF-IDF based.</Description>
 	<InputEncoding>UTF-8</InputEncoding>
 	<Image width="16" height="16" type="image/x-icon">./favicon.ico</Image>
-	<Url type="text/html" template="http://search.example.com/search.php?q={searchTerms}"/>
+	<Url type="text/html" template="http://search.example.com/results.php?q={searchTerms}"/>
 	<moz:SearchForm>http://search.example.com/</moz:SearchForm>
 </OpenSearchDescription>

@@ -23,7 +23,7 @@ function printSite($searchString, $creds) {
 	echo "                    |_|                                                            \n";
 	echo "			</pre>";
 	echo "			<div>\n";
-	echo "				<form id=\"form\" action=\"./search.php\" method=\"get\">\n";
+	echo "				<form id=\"form\" action=\"./results.php\" method=\"get\">\n";
 	echo "					<input type=\"search\" name=\"q\" value='$searchString'>\n";
 	echo "					<button>Search</button>\n";
 	echo "				</form>\n";
