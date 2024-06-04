@@ -198,9 +198,9 @@ def printCliResults(results, resultsPerPage, page, creds):
 				if result:
 					title, url, description, paragraphs = result
 					if description != "No description provided.":
-						print(f"{title.replace("\n", "")}\n{url}\n{description.replace("\n", "")}\nResult ID: {result_id}\nScore: {score}\n")
+						print("%s\n%s\n%s\nResult ID: %d\nScore: %d\n" % (title.replace("\n", ""), url, description.replace("\n", ""), result_id, score))
 					else:
-						print(f"{title.replace("\n", "")}\n{url}\n{paragraphs.replace("\n", "")}\nResult ID: {result_id}\nScore: {score}\n")
+						print("%s\n%s\n%s\nResult ID: %d\nScore: %d\n" % (title.replace("\n", ""), url, paragraphs.replace("\n", ""), result_id, score))
 
 	except mysql.connector.Error as error:
 		print("Error retrieving data from database: {}".format(error))
