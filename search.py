@@ -162,8 +162,6 @@ def preformSearch(searchString, creds):
 						tfidfScore += (AGE_POINTS / 5)
 
 			tfidf[db_id] = tfidfScore
-			#for key, value in tfidf.items():
-			#	print(f"Key: {key}, Value: {value}")
 			row = cursor.fetchone()
 
 		# Drop any results that are too low
