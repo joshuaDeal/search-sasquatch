@@ -65,7 +65,7 @@ def listCountValues(input):
 	return valueCounts
 
 # Takes a search string as input. Returns an array of result id numbers.
-def preformSearch(searchString, creds):
+def performSearch(searchString, creds):
 	TITLE_POINTS = 6
 	HEADER_POINTS = 4
 	KEYWORD_POINTS = 5
@@ -250,7 +250,7 @@ def main():
 	arguments = evalArguments()
 	creds = getMySqlCreds(arguments['credsFile'],arguments['keyFile'])
 
-	results = preformSearch(arguments['searchString'], creds)
+	results = performSearch(arguments['searchString'], creds)
 
 	if arguments['outputMode'] == 'cli':
 		printCliResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
