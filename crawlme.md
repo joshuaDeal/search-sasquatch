@@ -28,6 +28,7 @@ Do note that most entries on this list are courtesy of chatGPT. I haven't checke
    - Epicurious.com
    - BonAppetit.com
    - SeriousEats.com
+   - based.cooking
 
 5. Travel:
    - LonelyPlanet.com
