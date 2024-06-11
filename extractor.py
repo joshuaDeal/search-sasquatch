@@ -51,7 +51,6 @@ def getUrl(fileName, lineNumber):
 
 # Check text for naughty terms.
 def checkForNaughty(text, file):
-	print("Checking for naughty terms!")
 	# Load naughty terms.
 	naughtyTerms = []
 	with open(file, 'r') as file:
@@ -59,13 +58,11 @@ def checkForNaughty(text, file):
 
 	# Check for naughty terms in text
 	text = text.lower()
-	print("Text is", text)
 	for term in naughtyTerms:
 		if term in text:
-			print("Found Some!")
+			print("Flagging as NSFW...")
 			return True
 
-	print("No such terms found!")
 	return False
 
 # Get the page title.
