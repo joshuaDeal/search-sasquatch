@@ -26,6 +26,13 @@ function printSite($searchString, $creds) {
 	echo "				<form id=\"form\" action=\"./results.php\" method=\"get\">\n";
 	echo "					<input type=\"search\" name=\"q\" value='$searchString'>\n";
 	echo "					<button>Search</button>\n";
+	echo "					<div id='safe-search'>";
+	echo "						<label for='safe-search'>Safe Search</label>";
+	echo "						<input type='radio' name='safe' id='on' value='1' checked='checked'>";
+	echo "						<label for='on'>On</label>";
+	echo "						<input type='radio' name='safe' id='off' value='0'>";
+	echo "						<label for='off'>Off</label>";
+	echo "					</div>";
 	echo "				</form>\n";
 	echo "			</div>\n";
 	echo "		</header>\n";
