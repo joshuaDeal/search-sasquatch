@@ -18,7 +18,8 @@ def printHelp():
 	print("\t--search-string \"search string text\"\tSpecify the search string.")
 	print("\t--results-per-page <number>\t\tSpecify the number of results per page.")
 	print("\t--page <number>\t\t\t\tSpecify what page to load.")
-	print("\t--output <format>\t\t\t\tSpecify what format to use in output.")
+	print("\t--output <format>\t\t\tSpecify what format to use in output.")
+	print("\t--nsfw\t\t\t\t\tDisable safe search.")
 
 # Evaluate command line arguments.
 def evalArguments():
@@ -27,6 +28,7 @@ def evalArguments():
 	output['pageNumber'] = 1
 	output['resultsPerPage'] = 0
 	output['outputMode'] = 'cli'
+	output['safe'] = True
 
 	for i in range(len(sys.argv)):
 		# Print help message.
@@ -51,6 +53,9 @@ def evalArguments():
 		# Let user set output mode.
 		elif sys.argv[i] == "--output" or sys.argv[i] == "-o":
 			output['outputMode'] = sys.argv[i+1]
+		# Let user disable safe search.
+		elif sys.argv[i] == "--nsfw" or sys.argv[i] == "-n":
+			output['safe'] = False
 	return output
 
 # Count how many times a item appears in an array.
@@ -65,7 +70,7 @@ def listCountValues(input):
 	return valueCounts
 
 # Takes a search string as input. Returns an array of result id numbers.
-def performSearch(searchString, creds):
+def performSearch(searchString, safe, creds):
 	TITLE_POINTS = 6
 	HEADER_POINTS = 4
 	KEYWORD_POINTS = 5
@@ -104,7 +109,11 @@ def performSearch(searchString, creds):
 
 		# Calculate the TF-IDF score for each document.
 		tfidf={}
-		query = "SELECT id, url, last_visited, keywords, title, description, headers, paragraphs, lists FROM sites"
+		if safe == 1:
+			query = "SELECT id, url, last_visited, keywords, title, description, headers, paragraphs, lists FROM sites WHERE safe = 1"
+		else:
+			query = "SELECT id, url, last_visited, keywords, title, description, headers, paragraphs, lists FROM sites"
+
 		cursor.execute(query)
 
 		row = cursor.fetchone()
@@ -250,7 +259,7 @@ def main():
 	arguments = evalArguments()
 	creds = getMySqlCreds(arguments['credsFile'],arguments['keyFile'])
 
-	results = performSearch(arguments['searchString'], creds)
+	results = performSearch(arguments['searchString'], arguments['safe'], creds)
 
 	if arguments['outputMode'] == 'cli':
 		printCliResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
