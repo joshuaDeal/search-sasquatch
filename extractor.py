@@ -49,6 +49,25 @@ def getUrl(fileName, lineNumber):
 		print(f"File '{fileName}' not found")
 		return 0
 
+# Check text for naughty terms.
+def checkForNaughty(text, file):
+	print("Checking for naughty terms!")
+	# Load naughty terms.
+	naughtyTerms = []
+	with open(file, 'r') as file:
+		naughtyTerms = [line.strip().lower() for line in file]
+
+	# Check for naughty terms in text
+	text = text.lower()
+	print("Text is", text)
+	for term in naughtyTerms:
+		if term in text:
+			print("Found Some!")
+			return True
+
+	print("No such terms found!")
+	return False
+
 # Get the page title.
 def parseTitle(htmlSoup):
 	titleTag = htmlSoup.title
@@ -161,7 +180,14 @@ def getMeta(url, dataDict=None):
 			lists = lists[:300]
 		metaData['lists'] = lists
 
-		return metaData
+		# Check for naughty terms.
+		text = ''.join(str(metaData.values()))
+		if checkForNaughty(text, "./naughty-words.txt"):
+			safe = 0
+		else:
+			safe = 1
+
+		return metaData, safe
 	return None
 
 # Read MySQL username and password from a file
@@ -182,7 +208,7 @@ def getMySqlCreds(fileName,keyFile):
 		print(f"Error decrypting file: {e}")
 		return None
 
-def updateDataBase(dataDict,creds):
+def updateDataBase(dataDict, safe, creds):
 	connection = None
 
 	try:
@@ -192,8 +218,8 @@ def updateDataBase(dataDict,creds):
 		cursor = connection.cursor()
 
 		# Update the database with the data from dataDict
-		query = "INSERT INTO sites (url, title, description, keywords, headers, paragraphs, lists, first_visited, last_visited) VALUES (%s, %s, %s, %s, %s, %s, %s, IFNULL(first_visited, CURRENT_TIMESTAMP), IFNULL(last_visited, CURRENT_TIMESTAMP)) ON DUPLICATE KEY UPDATE title = VALUES(title), description = VALUES(description), keywords = VALUES(keywords), headers = VALUES(headers), paragraphs = VALUES(paragraphs), lists = VALUES(lists), last_visited = CURRENT_TIMESTAMP"
-		cursor.execute(query, (str(dataDict['url']), str(dataDict['title']), str(dataDict['description']), str(dataDict['keywords']), str(dataDict['headers']), str(dataDict['paragraphs']), str(dataDict['lists'])))
+		query = "INSERT INTO sites (url, title, description, keywords, headers, paragraphs, lists, first_visited, last_visited, safe) VALUES (%s, %s, %s, %s, %s, %s, %s, IFNULL(first_visited, CURRENT_TIMESTAMP), IFNULL(last_visited, CURRENT_TIMESTAMP), %s) ON DUPLICATE KEY UPDATE title = VALUES(title), description = VALUES(description), keywords = VALUES(keywords), headers = VALUES(headers), paragraphs = VALUES(paragraphs), lists = VALUES(lists), last_visited = CURRENT_TIMESTAMP, safe = VALUES(safe)"
+		cursor.execute(query, (str(dataDict['url']), str(dataDict['title']), str(dataDict['description']), str(dataDict['keywords']), str(dataDict['headers']), str(dataDict['paragraphs']), str(dataDict['lists']), safe))
 		# Commit the changes to the database
 		connection.commit()
 
@@ -215,9 +241,9 @@ def main():
 		if url == 0:
 			break
 		print("Parsing " + url + "...")
-		meta = getMeta(url)
+		meta, safe = getMeta(url)
 		if meta != None:
-			updateDataBase(meta,getMySqlCreds('db_creds.gpg',arguments['keyFile']))
+			updateDataBase(meta, safe, getMySqlCreds('db_creds.gpg',arguments['keyFile']))
 		i = i + 1
 
 if __name__ == "__main__":
