@@ -50,7 +50,12 @@ function printResults($searchString) {
 	$currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
 
 	// Preform the search.
-	$cmd = "/opt/search-sasquatch/search.py -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+	if ($_GET['safe'] == 1) {
+		$cmd = "/opt/search-sasquatch/search.py -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+	} elseif ($_GET['safe'] == 0) {
+		$cmd = "/opt/search-sasquatch/search.py -n -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+	}
+
 	$output = shell_exec($cmd);
 
 	// Decode the json output.
