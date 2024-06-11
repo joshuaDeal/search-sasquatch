@@ -28,10 +28,18 @@ function printSite($searchString, $creds) {
 	echo "					<button>Search</button>\n";
 	echo "					<div id='safe-search'>";
 	echo "						<label for='safe-search'>Safe Search</label>";
-	echo "						<input type='radio' name='safe' id='on' value='1' checked='checked'>";
-	echo "						<label for='on'>On</label>";
-	echo "						<input type='radio' name='safe' id='off' value='0'>";
-	echo "						<label for='off'>Off</label>";
+	// Remeber if safe search was enabled or disabled.
+	if ($_GET['safe'] == 1) {
+		echo "						<input type='radio' name='safe' id='on' value='1' checked='checked'>";
+		echo "						<label for='on'>On</label>";
+		echo "						<input type='radio' name='safe' id='off' value='0'>";
+		echo "						<label for='off'>Off</label>";
+	} else {
+		echo "						<input type='radio' name='safe' id='on' value='1'>";
+		echo "						<label for='on'>On</label>";
+		echo "						<input type='radio' name='safe' id='off' value='0' checked='checked'>";
+		echo "						<label for='off'>Off</label>";
+	}
 	echo "					</div>";
 	echo "				</form>\n";
 	echo "			</div>\n";
