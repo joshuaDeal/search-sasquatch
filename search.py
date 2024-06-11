@@ -53,6 +53,7 @@ def evalArguments():
 			output['outputMode'] = sys.argv[i+1]
 	return output
 
+# Count how many times a item appears in an array.
 def listCountValues(input):
 	valueCounts = {}
 
