@@ -46,7 +46,6 @@ def getUrl(fileName, lineNumber):
 				print(f"Line number {lineNumber} is out of range in file {fileName}")
 				return 0
 	except FileNotFoundError:
-		print(f"File '{fileName}' not found")
 		return 0
 
 # Check text for naughty terms.
@@ -72,7 +71,6 @@ def parseTitle(htmlSoup):
 		#metaData['title'] = titleTag.string
 		return titleTag.string
 	else:
-		print("Title tag not found.")
 		return "Untitled Page"
 
 # Get meta description.
@@ -81,7 +79,6 @@ def parseDescription(htmlSoup):
 	if description:
 		return description.get('content', '')
 	else:
-		print("Meta description not found.")
 		return "No description provided."
 
 # Get meta keywords.
@@ -90,7 +87,6 @@ def parseKeywords(htmlSoup):
 	if keyWords:
 		return keyWords.get('content', '')
 	else:
-		print("Meta keywords not found.")
 		return ""
 
 # Get headers.
