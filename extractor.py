@@ -88,7 +88,7 @@ def parseDescription(htmlSoup):
 def parseKeywords(htmlSoup):
 	keyWords = htmlSoup.find('meta', attrs={'name': 'keywords'})
 	if keyWords:
-		return keyWords['content']
+		return keyWords.get('content', '')
 	else:
 		print("Meta keywords not found.")
 		return ""
