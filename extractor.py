@@ -238,8 +238,9 @@ def main():
 		if url == 0:
 			break
 		print("Parsing " + url + "...")
-		meta, safe = getMeta(url)
+		meta = getMeta(url)
 		if meta != None:
+			meta, safe = meta
 			updateDataBase(meta, safe, getMySqlCreds('db_creds.gpg',arguments['keyFile']))
 		i = i + 1
 
