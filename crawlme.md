@@ -302,7 +302,6 @@ Do note that most entries on this list are courtesy of chatGPT. I haven't checke
    - TheGuardian.com
    - Politico.com
 
-
 Additionally, sites that aggregate links.
    - Reddit.com
    - Slashdot.org
