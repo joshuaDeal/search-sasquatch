@@ -290,6 +290,19 @@ Do note that most entries on this list are courtesy of chatGPT. I haven't checke
    - DigitalPoint.com
    - WarriorForum.com
 
+43. Current News and Events:
+   - CNN.com
+   - BBC.com
+   - NYTimes.com
+   - WashingtonPost.com
+   - FoxNews.com
+   - Reuters.com
+   - AlJazeera.com
+   - NPR.org
+   - TheGuardian.com
+   - Politico.com
+
+
 Additionally, sites that aggregate links.
    - Reddit.com
    - Slashdot.org
