@@ -59,7 +59,7 @@ def checkForNaughty(text, file):
 	# Check for naughty terms in text
 	text = text.lower()
 	for term in naughtyTerms:
-		if term in text:
+		if term in text.split():
 			print("Flagging as NSFW...")
 			return True
 
