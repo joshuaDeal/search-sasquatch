@@ -233,6 +233,7 @@ Do note that most entries on this list are courtesy of chatGPT. I haven't checke
    - kotaku.com
    - metacritic.com
    - gameinformer.com
+   - gamesradar.com
 
 27. Anime/Manga:
    - MyAnimeList.net
