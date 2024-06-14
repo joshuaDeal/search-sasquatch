@@ -68,7 +68,6 @@ def checkForNaughty(text, file):
 def parseTitle(htmlSoup):
 	titleTag = htmlSoup.title
 	if titleTag:
-		#metaData['title'] = titleTag.string
 		return titleTag.string
 	else:
 		return "Untitled Page"
@@ -139,9 +138,12 @@ def getMeta(url, dataDict=None):
 
 		# Get the page title.
 		title = parseTitle(soup)
-		if len(title) > 70:
-			title = title[:70]
-		metaData['title'] = title
+		if title is not None:
+			if len(title) > 70:
+				title = title[:70]
+			metaData['title'] = title
+		else:
+			metaData['title'] = "Untitled Page"
 
 		# Get meta description.
 		description = parseDescription(soup)
