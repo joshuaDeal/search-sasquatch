@@ -64,6 +64,11 @@ def checkForNaughty(text, file):
 
 	return False
 
+# Check content type.
+def checkContentType(headers):
+	contentType = headers.get('content-type')
+	return contentType is not None and ('text/html' in contentType or 'application/xhtml+xml' in contentType)
+
 # Get the page title.
 def parseTitle(htmlSoup):
 	titleTag = htmlSoup.title
@@ -235,11 +240,21 @@ def main():
 		url = getUrl(urlsFile,i)
 		if url == 0:
 			break
-		print("Parsing " + url + "...")
-		meta = getMeta(url)
-		if meta != None:
-			meta, safe = meta
-			updateDataBase(meta, safe, getMySqlCreds('db_creds.gpg',arguments['keyFile']))
+
+		# Send head request to check content type
+		response = requests.head(url)
+
+		if response.status_code == 200 and checkContentType(response.headers):
+			print("Parsing " + url + "...")
+			meta = getMeta(url)
+			if meta != None:
+				meta, safe = meta
+				updateDataBase(meta, safe, getMySqlCreds('db_creds.gpg',arguments['keyFile']))
+		elif response.status_code != 200:
+			print("Error: response code", response.status_code)
+		else:
+			print("Skipping non-html content:", url)
+
 		i = i + 1
 
 if __name__ == "__main__":
