@@ -36,6 +36,11 @@ def evalArguments():
 
 # Returns the html content from a provided url.
 def getHtml(url):
+	# Check if url is empty.
+	if not url:
+		print("Skipping empty URL")
+		return None
+
 	# Find out what the url scheme is so we can make sure that it's valid.
 	scheme = urlparse(url).scheme
 
