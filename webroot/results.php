@@ -129,7 +129,9 @@ function main() {
 		$searchString = filter_var($_GET["q"], FILTER_SANITIZE_STRING);
 
 		if (empty($searchString)) {
-			header('Location: http://search.example.com/');
+			$url = "http://search.example.com/?style=" . $_GET['style'];
+
+			header("Location: $url");
 			exit;
 		}
 		// Make sure that access to these files is restricted. They should only be accessed by administrators.
