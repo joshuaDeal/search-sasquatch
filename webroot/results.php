@@ -6,7 +6,11 @@ function printSite($searchString, $creds) {
 	echo "<html lang=\"en\">\n";
 	echo "	<head>\n";
 	echo "		<title>" . $searchString . " - Search Sasquatch!</title>\n";
-	echo "		<link rel=\"stylesheet\" href=\"style.css\">\n";
+	if ($_GET['style'] == 'solarized') {
+		echo "		<link rel=\"stylesheet\" href=\"style2.css\">\n";
+	} else {
+		echo "		<link rel=\"stylesheet\" href=\"style.css\">\n";
+	}
 	echo "		<link rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/x-icon\">\n";
 	echo "		<meta name=\"description\" content=\"Search results for " . $searchString . "\">\n";
 	echo "		<meta charset=\"utf-8\">\n";
