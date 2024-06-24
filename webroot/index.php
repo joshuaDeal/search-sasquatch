@@ -35,6 +35,9 @@
 						<label for='on'>On</label>
 						<input type="radio" name="safe" id='off' value='0'>
 						<label for='off'>Off</label>
+						<?php
+							echo "<input type='hidden' name='style' value='" . $_GET['style'] . "'>\n";
+						?>
 					</div>
 				</form>	
 			</div>
