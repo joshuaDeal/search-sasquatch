@@ -77,16 +77,21 @@ def updateIndex(fileName, url):
 # Extracts urls from html.
 def getUrls(htmlContent, baseUrl):
 	urls = []
-	soup = BeautifulSoup(htmlContent, 'html.parser')
-	for link in soup.find_all('a', href=True):
-		url = link.get('href')
-		# Check if url is absolute or relative.
-		if url.startswith('http') or url.startswith('https'):
-			urls.append(url)
-		# If the url is relative, use urljoin() to make it an absolute url.
-		else:
-			fullUrl = urljoin(baseUrl, url)
-			urls.append(fullUrl)
+	try:
+		soup = BeautifulSoup(htmlContent, 'html.parser')
+		for link in soup.find_all('a', href=True):
+			url = link.get('href')
+			# Check if url is absolute or relative.
+			if url.startswith('http') or url.startswith('https'):
+				urls.append(url)
+			# If the url is relative, use urljoin() to make it an absolute url.
+			else:
+				fullUrl = urljoin(baseUrl, url)
+				urls.append(fullUrl)
+	except ParseRejectedMarkup as e:
+		print("Error parsing HTML:",e)
+	except Exception as e:
+		print("An error occured:",e)
 	return urls
 
 def main():
