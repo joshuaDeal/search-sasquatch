@@ -2,7 +2,13 @@
 <html lang="en">
 	<head>
 		<title>Search Sasquatch!</title>
-		<link rel="stylesheet" href="style.css">
+		<?php
+			if ($_GET['style'] == 'gruvbox') {
+				echo "<link rel='stylesheet' href='style.css'>";
+			} elseif ($_GET['style'] == 'solarized') {
+				echo "<link rel='stylesheet' href='style2.css'>";
+			}
+		?>
 		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 		<link rel="search" type="application/opensearchdescription+xml" title="Search Sasquatch" href="./opensearch.xml">
 		<meta name="description" content="An internet search engine written mostly in python. Currently TF-IDF based.">
@@ -35,7 +41,7 @@
 		</header>
 		<footer id='index'>
 			<p><a href="https://github.com/joshuadeal/search-sasquatch">GitHub</a></p>
-			<form action="index.html" method="get">
+			<form action="index.php" method="get">
 				<select name='style' id='style'>
 					<option value="gruvbox">Gruvbox</option>
 					<option value="solarized">Solarized</option>
