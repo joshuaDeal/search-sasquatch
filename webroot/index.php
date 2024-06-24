@@ -4,9 +4,9 @@
 		<title>Search Sasquatch!</title>
 		<?php
 			if ($_GET['style'] == 'gruvbox') {
-				echo "<link rel='stylesheet' href='style.css'>";
+				echo "<link rel='stylesheet' href='style.css'>\n";
 			} elseif ($_GET['style'] == 'solarized') {
-				echo "<link rel='stylesheet' href='style2.css'>";
+				echo "<link rel='stylesheet' href='style2.css'>\n";
 			}
 		?>
 		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
