@@ -6,6 +6,7 @@
 import requests
 import sys
 import subprocess
+import bs4
 import mysql.connector
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -128,61 +129,65 @@ def getMeta(url, dataDict=None):
 	if dataDict is None or 'first_visited' not in dataDict:
 		metaData['first_visited'] = datetime.now()
 
+	try :
+		# Get html content.
+		htmlContent = getHtml(url)
 
-	# Get html content.
-	htmlContent = getHtml(url)
+		if htmlContent != None:
+			# Parse html content with BeautifulSoup.
+			soup = BeautifulSoup(htmlContent, 'html.parser')
 
-	if htmlContent != None:
-		# Parse html content with BeautifulSoup.
-		soup = BeautifulSoup(htmlContent, 'html.parser')
+			# Get the page title.
+			title = parseTitle(soup)
+			if title is not None:
+				if len(title) > 70:
+					title = title[:70]
+				metaData['title'] = title
+			else:
+				metaData['title'] = "Untitled Page"
 
-		# Get the page title.
-		title = parseTitle(soup)
-		if title is not None:
-			if len(title) > 70:
-				title = title[:70]
-			metaData['title'] = title
-		else:
-			metaData['title'] = "Untitled Page"
+			# Get meta description.
+			description = parseDescription(soup)
+			if len(description) > 150:
+				description = description[:150]
+			metaData['description'] = description
 
-		# Get meta description.
-		description = parseDescription(soup)
-		if len(description) > 150:
-			description = description[:150]
-		metaData['description'] = description
+			# Get meta keywords.
+			keywords = parseKeywords(soup)
+			if len(keywords) > 50:
+				keywords = keywords[:50]
+			metaData['keywords'] = keywords
 
-		# Get meta keywords.
-		keywords = parseKeywords(soup)
-		if len(keywords) > 50:
-			keywords = keywords[:50]
-		metaData['keywords'] = keywords
+			# Get headers
+			headers = parseHeaders(soup)
+			if len(headers) > 300:
+				headers = headers[:300]
+			metaData['headers'] = headers
 
-		# Get headers
-		headers = parseHeaders(soup)
-		if len(headers) > 300:
-			headers = headers[:300]
-		metaData['headers'] = headers
+			# Get paragraphs
+			paragraphs = parseParagraphs(soup)
+			if len(paragraphs) > 500:
+				paragraphs = paragraphs[:500]
+			metaData['paragraphs'] = paragraphs
 
-		# Get paragraphs
-		paragraphs = parseParagraphs(soup)
-		if len(paragraphs) > 500:
-			paragraphs = paragraphs[:500]
-		metaData['paragraphs'] = paragraphs
+			# Get lists
+			lists = parseLists(soup)
+			if len(lists) > 300:
+				lists = lists[:300]
+			metaData['lists'] = lists
 
-		# Get lists
-		lists = parseLists(soup)
-		if len(lists) > 300:
-			lists = lists[:300]
-		metaData['lists'] = lists
+			# Check for naughty terms.
+			text = ''.join(str(metaData.values()))
+			if checkForNaughty(text, "./naughty-words.txt"):
+				safe = 0
+			else:
+				safe = 1
 
-		# Check for naughty terms.
-		text = ''.join(str(metaData.values()))
-		if checkForNaughty(text, "./naughty-words.txt"):
-			safe = 0
-		else:
-			safe = 1
-
-		return metaData, safe
+			return metaData, safe
+	except bs4.builder.ParserRejectedMarkup as e:
+		print("Error parsing HTML:",e)
+	except Exception as e:
+		print("An error occured:",e)
 	return None
 
 # Read MySQL username and password from a file
