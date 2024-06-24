@@ -80,7 +80,7 @@ footer a:hover {
 
 #result h4 {
 	margin: 0;
-	color: #b58900;
+	color: #ffd24d;
 	overflow: hidden;
 }
 
@@ -108,11 +108,11 @@ p {
 }
 
 #current-page {
-	background-color: #d33682;
+	background-color: #2aa198;
 }
 
 #current-page:hover {
-	background-color: #dc322f;
+	background-color: #c2efec;
 }
 
 @media (max-width: 666px) {
