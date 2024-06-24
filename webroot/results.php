@@ -52,9 +52,19 @@ function printSite($searchString, $creds) {
 	echo "		</header>\n";
 	// Start of results
 	printResults($searchString);
-	echo "		<footer>";
-	echo "			<p><a href='https://github.com/joshuadeal/search-sasquatch'>GitHub</a></p>";
-	echo "		</footer>";
+	echo "		<footer>\n";
+	echo "			<p><a href='https://github.com/joshuadeal/search-sasquatch'>GitHub</a></p>\n";
+	echo "			<form action='results.php' method='get'>\n";
+	echo "				<select name='style' id='style'>\n";
+	echo "					<option value='gruvbox'>Gruvbox</option>\n";
+	echo "					<option value='solarized'>Solarized</option>\n";
+	echo "				</select>\n";
+	echo "				<input type='submit' value='Submit'>\n";
+	echo "				<input type='hidden' name='q' value='" . $_GET['q'] . "'>\n";
+	echo "				<input type='hidden' name='page' value='" . $_GET['page'] . "'>\n";
+	echo "				<input type='hidden' name='safe' value='" . $_GET['safe'] . "'>\n";
+	echo "			</form>\n";
+	echo "		</footer>\n";
 	echo "	</body>\n";
 	echo "</html>\n";
 }
