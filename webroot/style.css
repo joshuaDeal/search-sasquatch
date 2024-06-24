@@ -46,11 +46,25 @@ button:hover {
 }
 
 footer {
-	bottom: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 	background-color: #3c3836;
 	color: #ebdbb2;
 	text-align: center;
 	padding: 10px;
+}
+
+footer p, footer form {
+	margin: 25px 10px;
+}
+
+footer form {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 
 #index {
