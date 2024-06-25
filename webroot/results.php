@@ -8,6 +8,8 @@ function printSite($searchString, $creds) {
 	echo "		<title>" . $searchString . " - Search Sasquatch!</title>\n";
 	if ($_GET['style'] == 'solarized') {
 		echo "		<link rel=\"stylesheet\" href=\"style2.css\">\n";
+	} elseif ($_GET['style'] == 'ubuntu') {
+		echo "		<link rel=\"stylesheet\" href=\"style3.css\">\n";
 	} else {
 		echo "		<link rel=\"stylesheet\" href=\"style.css\">\n";
 	}
@@ -58,6 +60,7 @@ function printSite($searchString, $creds) {
 	echo "				<select name='style' id='style'>\n";
 	echo "					<option value='gruvbox'>Gruvbox</option>\n";
 	echo "					<option value='solarized'>Solarized</option>\n";
+	echo "					<option value='ubuntu'>Ubuntu</option>\n";
 	echo "				</select>\n";
 	echo "				<input type='submit' value='Submit'>\n";
 	echo "				<input type='hidden' name='q' value='" . $_GET['q'] . "'>\n";

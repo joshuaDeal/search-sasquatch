@@ -1,0 +1,141 @@
+body {
+	background-color: #300a24;
+	color: #ebebe9;
+	font-family: 'Courier New', Courier, monospace;
+	margin: 0;
+	padding: 0;
+}
+
+header {
+	background-color: #3e283c;
+	color: #ebebe9;
+	text-align: center;
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #2e2831;
+	border-radius: 5px;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 20px;
+}
+
+input[type="search"] {
+	padding: 5px;
+	width: 100%;
+	max-width: 300px;
+	border: 1px solid #3e283c;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+button {
+	padding: 5px 10px;
+	background-color: #4e9a06;
+	color: #ebebe9;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #8ae234;
+}
+
+footer {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	background-color: #3e283c;
+	color: #ebebe9;
+	text-align: center;
+	padding: 10px;
+}
+
+footer p, footer form {
+	margin: 25px 10px;
+}
+
+footer form {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+#index {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+footer a {
+	color: #a87aa3;
+	text-decoration: none;
+}
+
+footer a:hover {
+	color: #c4a000;
+}
+
+#result {
+	background-color: #3e283c;
+	color: #ebebe9;
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #2e2831;
+	border-radius: 5px;
+}
+
+#result h4 {
+	margin: 0;
+	color: #f6e24d;
+	overflow: hidden;
+}
+
+p {
+	margin: 5px 0;
+	overflow: hidden;
+}
+
+#result-url {
+	color: #06989a;
+	font-style: italic;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#pagination {
+	text-align: center;
+	background-color: #3e283c;
+	color: #ebebe9;
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #2e2831;
+	border-radius: 5px;
+}
+
+#current-page {
+	background-color: #c4a000;
+}
+
+#current-page:hover {
+	background-color: #f7e44e;
+}
+
+@media (max-width: 666px) {
+	pre {
+		font-size: 5px;
+	}
+}
+
+@media (max-width: 247px) {
+	pre {
+		font-size: 2px;
+	}
+}

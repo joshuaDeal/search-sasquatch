@@ -5,6 +5,8 @@
 		<?php
 			if ($_GET['style'] == 'solarized') {
 				echo "<link rel='stylesheet' href='style2.css'>\n";
+			} elseif ($_GET['style'] == 'ubuntu') {
+				echo "<link rel='stylesheet' href='style3.css'>\n";
 			} else {
 				echo "<link rel='stylesheet' href='style.css'>\n";
 			}
@@ -48,6 +50,7 @@
 				<select name='style' id='style'>
 					<option value="gruvbox">Gruvbox</option>
 					<option value="solarized">Solarized</option>
+					<option value="ubuntu">Ubuntu</option>
 				</select>
 				<input type="submit" value="Submit">
 			</form>
