@@ -227,7 +227,7 @@ def updateDataBase(dataDict, safe, creds):
 		print("Error updating the database for url '{}': {}".format(dataDict['url'],error))
 
 	finally:
-		if connection is not None: #and connection.is_connected():
+		if connection is not None and connection.ping():
 			cursor.close()
 			connection.close()
 
