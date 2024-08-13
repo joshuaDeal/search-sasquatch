@@ -7,7 +7,7 @@ import requests
 import sys
 import subprocess
 import bs4
-import mysql.connector
+import mariadb
 from datetime import datetime
 from bs4 import BeautifulSoup
 from crawler import getHtml
@@ -213,7 +213,7 @@ def updateDataBase(dataDict, safe, creds):
 
 	try:
 		# Create a connection to the MariaDB database
-		connection = mysql.connector.connect(host='localhost', unix_socket='/var/run/mysqld/mysqld.sock', database='sasquatch_index', user=creds['username'], password=creds['password'])
+		connection = mariadb.connect(host='localhost', unix_socket='/var/run/mysqld/mysqld.sock', database='sasquatch_index', user=creds['username'], password=creds['password'])
 
 		cursor = connection.cursor()
 
@@ -223,11 +223,11 @@ def updateDataBase(dataDict, safe, creds):
 		# Commit the changes to the database
 		connection.commit()
 
-	except mysql.connector.Error as error:
+	except mariadb.Error as error:
 		print("Error updating the database for url '{}': {}".format(dataDict['url'],error))
 
 	finally:
-		if connection is not None and connection.is_connected():
+		if connection is not None: #and connection.is_connected():
 			cursor.close()
 			connection.close()
 
