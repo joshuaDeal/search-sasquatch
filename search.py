@@ -182,7 +182,7 @@ def performSearch(searchString, safe, creds):
 	except mariadb.Error as error:
 		print("Error connecting to database: {}".format(error))
 	finally:
-		if conn is not None: #and conn.is_connected():
+		if conn is not None and conn.ping():
 			cursor.close()
 			conn.close()
 
@@ -215,7 +215,7 @@ def printCliResults(results, resultsPerPage, page, creds):
 	except mariadb.Error as error:
 		print("Error retrieving data from database: {}".format(error))
 	finally:
-		if conn is not None: #and conn.is_connected():
+		if conn is not None and conn.ping():
 			cursor.close()
 			conn.close()
 
@@ -251,7 +251,7 @@ def printJsonResults(results, resultsPerPage, page, creds):
 	except mariadb.Error as error:
 		print("Error retrieving data from database: {}".format(error))
 	finally:
-		if conn is not None: #and conn.is_connected():
+		if conn is not None and conn.ping():
 			cursor.close()
 			conn.close()
 
