@@ -2,7 +2,7 @@
 
 import sys
 import math
-import mysql.connector
+import mariadb
 import re
 import json
 from datetime import datetime
@@ -90,7 +90,7 @@ def performSearch(searchString, safe, creds):
 
 	# Connect to database
 	try:
-		conn = mysql.connector.connect(host=serverName, unix_socket='/var/run/mysqld/mysqld.sock', database=dbName, user=creds['username'], password=creds['password'])
+		conn = mariadb.connect(host=serverName, unix_socket='/var/run/mysqld/mysqld.sock', database=dbName, user=creds['username'], password=creds['password'])
 
 		cursor = conn.cursor()
 
@@ -179,10 +179,10 @@ def performSearch(searchString, safe, creds):
 
 		# Sort documents by score
 		sortedResults = dict(sorted(cleanResults.items(), key=lambda x : x[1], reverse=True))
-	except mysql.connector.Error as error:
+	except mariadb.Error as error:
 		print("Error connecting to database: {}".format(error))
 	finally:
-		if conn is not None and conn.is_connected():
+		if conn is not None: #and conn.is_connected():
 			cursor.close()
 			conn.close()
 
@@ -197,7 +197,7 @@ def printCliResults(results, resultsPerPage, page, creds):
 	print()
 
 	try:
-		conn = mysql.connector.connect(host="localhost", unix_socket="/var/run/mysqld/mysqld.sock", database="sasquatch_index", user=creds['username'], password=creds['password'])
+		conn = mariadb.connect(host="localhost", unix_socket="/var/run/mysqld/mysqld.sock", database="sasquatch_index", user=creds['username'], password=creds['password'])
 		cursor = conn.cursor()
 
 		for index, (result_id, score) in enumerate(results.items()):
@@ -212,10 +212,10 @@ def printCliResults(results, resultsPerPage, page, creds):
 					else:
 						print("%s\n%s\n%s\nResult ID: %d\nScore: %d\n" % (title.replace("\n", ""), url, paragraphs.replace("\n", ""), result_id, score))
 
-	except mysql.connector.Error as error:
+	except mariadb.Error as error:
 		print("Error retrieving data from database: {}".format(error))
 	finally:
-		if conn is not None and conn.is_connected():
+		if conn is not None: #and conn.is_connected():
 			cursor.close()
 			conn.close()
 
@@ -224,7 +224,7 @@ def printJsonResults(results, resultsPerPage, page, creds):
 	end_index = page * resultsPerPage if resultsPerPage > 0 else len(results)
 
 	try:
-		conn = mysql.connector.connect(host="localhost", unix_socket="/var/run/mysqld/mysqld.sock", database="sasquatch_index", user=creds['username'], password=creds['password'])
+		conn = mariadb.connect(host="localhost", unix_socket="/var/run/mysqld/mysqld.sock", database="sasquatch_index", user=creds['username'], password=creds['password'])
 		cursor = conn.cursor()
 
 		total_results = len(results)
@@ -248,10 +248,10 @@ def printJsonResults(results, resultsPerPage, page, creds):
 		json_output = json.dumps(output_data, indent=2, ensure_ascii=False)
 		print(json_output)
 
-	except mysql.connector.Error as error:
+	except mariadb.Error as error:
 		print("Error retrieving data from database: {}".format(error))
 	finally:
-		if conn is not None and conn.is_connected():
+		if conn is not None: #and conn.is_connected():
 			cursor.close()
 			conn.close()
 
