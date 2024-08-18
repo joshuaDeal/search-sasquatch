@@ -314,8 +314,11 @@ def main():
 
 	results = performSearch(arguments['searchString'], arguments['safe'], creds)
 
-	if arguments['imageMode']:
-		print(parseImageUrls(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)))
+	if arguments['imageMode'] and arguments['outputMode'] == 'json':
+		print(json.dumps(parseImageUrls(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds))))
+	elif arguments['imageMode'] and arguments['outputMode'] == 'cli':
+		for image, source in parseImageUrls(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)).items():
+			print("Image:", image + "\n" + "Source:", source + "\n")
 	elif arguments['outputMode'] == 'cli':
 		printCliResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
 	elif arguments['outputMode'] == 'json':
