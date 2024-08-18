@@ -310,6 +310,7 @@ def parseImageUrls(jsonResults):
 	# Quickly remove any duplicate items from the list.
 	cleanImages = list(dict.fromkeys(images))
 
+	# Output needs to be change to include source urls along with image urls. This extra data will be used by the php/web frontend.
 	return cleanImages
 
 def main():
