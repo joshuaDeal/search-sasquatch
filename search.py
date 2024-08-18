@@ -272,7 +272,7 @@ def parseImageUrls(jsonResults):
 	urls = [result['url'] for result in data['results']]
 
 	# Parse input urls for image urls
-	images = []
+	images = {}
 	for url in urls:
 		#print("Looking for images at", url, "...")
 		try:
@@ -301,17 +301,12 @@ def parseImageUrls(jsonResults):
 				# Make sure we have a valid image url.
 				if fullImgUrl.endswith(imageFormats):
 					#print("Found", fullImgUrl, "!")
-					images.append(fullImgUrl)
+					images[fullImgUrl] = url
 
 		except requests.RequestException as e:
 			print("Error fetching", url + ":", e)
-			#return []
 	
-	# Quickly remove any duplicate items from the list.
-	cleanImages = list(dict.fromkeys(images))
-
-	# Output needs to be change to include source urls along with image urls. This extra data will be used by the php/web frontend.
-	return cleanImages
+	return images
 
 def main():
 	arguments = evalArguments()
