@@ -23,6 +23,7 @@ def printHelp():
 	print("\t--page <number>\t\t\t\tSpecify what page to load.")
 	print("\t--output <format>\t\t\tSpecify what format to use in output.")
 	print("\t--nsfw\t\t\t\t\tDisable safe search.")
+	print("\t--image\t\t\t\t\tPerform an image search.")
 
 # Evaluate command line arguments.
 def evalArguments():
@@ -32,6 +33,7 @@ def evalArguments():
 	output['resultsPerPage'] = 0
 	output['outputMode'] = 'cli'
 	output['safe'] = True
+	output['imageMode'] = False
 
 	for i in range(len(sys.argv)):
 		# Print help message.
@@ -59,6 +61,8 @@ def evalArguments():
 		# Let user disable safe search.
 		elif sys.argv[i] == "--nsfw" or sys.argv[i] == "-n":
 			output['safe'] = False
+		elif sys.argv[i] == "--image" or sys.argv[i] == "-i":
+			output['imageMode'] = True
 	return output
 
 # Count how many times a item appears in an array.
@@ -270,7 +274,7 @@ def parseImageUrls(jsonResults):
 	# Parse input urls for image urls
 	images = []
 	for url in urls:
-		print("Looking for images at", url, "...")
+		#print("Looking for images at", url, "...")
 		try:
 			# Send GET request to the URL.
 			response = requests.get(url)
@@ -285,7 +289,7 @@ def parseImageUrls(jsonResults):
 			for img in soup.find_all('img'):
 				# Skip image if its the child of an ignored tag.
 				if img.find_parents(ignoreTags):
-					print("Ignoring", img.get('src'), "!")
+					#print("Ignoring", img.get('src'), "!")
 					continue
 
 				imgUrl = img.get('src')
@@ -296,7 +300,7 @@ def parseImageUrls(jsonResults):
 
 				# Make sure we have a valid image url.
 				if fullImgUrl.endswith(imageFormats):
-					print("Found", fullImgUrl, "!")
+					#print("Found", fullImgUrl, "!")
 					images.append(fullImgUrl)
 
 		except requests.RequestException as e:
@@ -314,10 +318,9 @@ def main():
 
 	results = performSearch(arguments['searchString'], arguments['safe'], creds)
 
-	#print(parseImageUrls(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)))
-	#sys.exit()
-
-	if arguments['outputMode'] == 'cli':
+	if arguments['imageMode']:
+		print(parseImageUrls(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)))
+	elif arguments['outputMode'] == 'cli':
 		printCliResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
 	elif arguments['outputMode'] == 'json':
 		print(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds))
