@@ -304,7 +304,8 @@ def parseImageUrls(jsonResults):
 					images[fullImgUrl] = url
 
 		except requests.RequestException as e:
-			print("Error fetching", url + ":", e)
+			#print("Error fetching", url + ":", e)
+			pass
 	
 	return images
 
