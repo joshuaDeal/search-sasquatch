@@ -5,7 +5,10 @@ import math
 import mariadb
 import re
 import json
+import requests
+from bs4 import BeautifulSoup
 from datetime import datetime
+from urllib.parse import urljoin
 from extractor import getMySqlCreds
 
 # Print a helpful message.
@@ -219,7 +222,7 @@ def printCliResults(results, resultsPerPage, page, creds):
 			cursor.close()
 			conn.close()
 
-def printJsonResults(results, resultsPerPage, page, creds):
+def getJsonResults(results, resultsPerPage, page, creds):
 	start_index = (page - 1) * resultsPerPage
 	end_index = page * resultsPerPage if resultsPerPage > 0 else len(results)
 
@@ -246,7 +249,8 @@ def printJsonResults(results, resultsPerPage, page, creds):
 					output_data["results"].append(result_data)
 
 		json_output = json.dumps(output_data, indent=2, ensure_ascii=False)
-		print(json_output)
+		return json_output
+		#print(json_output)
 
 	except mariadb.Error as error:
 		print("Error retrieving data from database: {}".format(error))
@@ -255,16 +259,68 @@ def printJsonResults(results, resultsPerPage, page, creds):
 			cursor.close()
 			conn.close()
 
+# Parse urls for relevant images. (image search)
+def parseImageUrls(jsonResults):
+	imageFormats = ('.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg')
+
+	# Get urls from input results.
+	data = json.loads(jsonResults)
+	urls = [result['url'] for result in data['results']]
+
+	# Parse input urls for image urls
+	images = []
+	for url in urls:
+		print("Looking for images at", url, "...")
+		try:
+			# Send GET request to the URL.
+			response = requests.get(url)
+			response.raise_for_status()
+
+			# Parse response content with BeautifulSoup.
+			soup = BeautifulSoup(response.content, 'html.parser')
+			ignoreTags = {'nav', 'header', 'footer', 'aside', 'script', 'style'}
+			#imgTags = soup.find_all('img')
+
+			# Extract valid image urls.
+			for img in soup.find_all('img'):
+				# Skip image if its the child of an ignored tag.
+				if img.find_parents(ignoreTags):
+					print("Ignoring", img.get('src'), "!")
+					continue
+
+				imgUrl = img.get('src')
+
+				# Make sure we have a full url and not a relative path.
+				if imgUrl:
+					fullImgUrl = urljoin(url, imgUrl)
+
+				# Make sure we have a valid image url.
+				if fullImgUrl.endswith(imageFormats):
+					print("Found", fullImgUrl, "!")
+					images.append(fullImgUrl)
+
+		except requests.RequestException as e:
+			print("Error fetching", url + ":", e)
+			#return []
+	
+	# Quickly remove any duplicate items from the list.
+	cleanImages = list(dict.fromkeys(images))
+
+	return cleanImages
+
 def main():
 	arguments = evalArguments()
 	creds = getMySqlCreds(arguments['credsFile'],arguments['keyFile'])
 
 	results = performSearch(arguments['searchString'], arguments['safe'], creds)
 
+	#print(parseImageUrls(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)))
+	#sys.exit()
+
 	if arguments['outputMode'] == 'cli':
 		printCliResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
 	elif arguments['outputMode'] == 'json':
-		printJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
+		print(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds))
 
 if __name__ == "__main__":
 	main()
