@@ -127,35 +127,7 @@ function printResults($searchString) {
 		}
 
 		// Print pagination links.
-		echo "<div id='pagination'>\n";
-		if ($currentPage > 1) {
-			echo "<a href='?q=$searchString&page=" . 1 . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button><<</button></a> ";
-			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Previous</button></a> ";
-		}
-		if ($data['total_pages'] < 10) {
-			for ($i = 1; $i <= $data['total_pages']; $i++) {
-				if ($i != $currentPage) {
-					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>$i</button></a> ";
-				} else {
-					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button id='current-page'>$i</button></a> ";
-				}
-			}
-		} else {
-			for ($i = ($currentPage - 4); $i <= $currentPage + 4; $i++) {
-				if($i > 0 && $i <= $data['total_pages']) {
-					if ($i != $currentPage) {
-						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>$i</button></a> ";
-					} else {
-						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button id='current-page'>$i</button></a> ";
-					}
-				}
-			}
-		}
-		if ($currentPage < $data['total_pages']) {
-			echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Next</button></a>";
-			echo "<a href='?q=$searchString&page=" . $data['total_pages'] . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>>></button></a> ";
-		}
-		echo "</div>\n";
+		printPages($currentPage,$searchString,$data);
 	// Output image results if in image mode.
 	} elseif ($_GET['mode'] == 'image' and $data) {
 		echo "<div id='result' style='text-align: center;'>\n";
@@ -169,39 +141,45 @@ function printResults($searchString) {
 		echo "</div>\n";
 
 		// Print pagination links.
-		echo "<div id='pagination'>\n";
-		if ($currentPage > 1) {
-			echo "<a href='?q=$searchString&page=" . 1 . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button><<</button></a> ";
-			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Previous</button></a> ";
+		printPages($currentPage,$searchString,$data);
+	} else {
+		echo "No results found\n";
+		echo $output;
+	}
+}
+
+
+// Print pagination links.
+function printPages($currentPage,$searchString,$data) {
+	echo "<div id='pagination'>\n";
+	if ($currentPage > 1) {
+		echo "<a href='?q=$searchString&page=" . 1 . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button><<</button></a> ";
+		echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Previous</button></a> ";
+	}
+	if ($data['total_pages'] < 10) {
+		for ($i = 1; $i <= $data['total_pages']; $i++) {
+			if ($i != $currentPage) {
+				echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>$i</button></a> ";
+			} else {
+				echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button id='current-page'>$i</button></a> ";
+			}
 		}
-		if ($data['total_pages'] < 10) {
-			for ($i = 1; $i <= $data['total_pages']; $i++) {
+	} else {
+		for ($i = ($currentPage - 4); $i <= $currentPage + 4; $i++) {
+			if($i > 0 && $i <= $data['total_pages']) {
 				if ($i != $currentPage) {
 					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>$i</button></a> ";
 				} else {
 					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button id='current-page'>$i</button></a> ";
 				}
 			}
-		} else {
-			for ($i = ($currentPage - 4); $i <= $currentPage + 4; $i++) {
-				if($i > 0 && $i <= $data['total_pages']) {
-					if ($i != $currentPage) {
-						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>$i</button></a> ";
-					} else {
-						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button id='current-page'>$i</button></a> ";
-					}
-				}
-			}
 		}
-		if ($currentPage < $data['total_pages']) {
-			echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Next</button></a>";
-			echo "<a href='?q=$searchString&page=" . $data['total_pages'] . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>>></button></a> ";
-		}
-		echo "</div>\n";
-	} else {
-		echo "No results found\n";
-		echo $output;
 	}
+	if ($currentPage < $data['total_pages']) {
+		echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Next</button></a>";
+		echo "<a href='?q=$searchString&page=" . $data['total_pages'] . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>>></button></a> ";
+	}
+	echo "</div>\n";
 }
 
 function main() {
