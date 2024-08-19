@@ -306,6 +306,9 @@ def parseImageUrls(jsonResults):
 		except requests.RequestException as e:
 			#print("Error fetching", url + ":", e)
 			pass
+
+	# Make sure we include meta data like total number of pages in the output dataset.
+	images['total_pages'] = data['total_pages']
 	
 	return images
 
@@ -319,7 +322,8 @@ def main():
 		print(json.dumps(parseImageUrls(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds))))
 	elif arguments['imageMode'] and arguments['outputMode'] == 'cli':
 		for image, source in parseImageUrls(getJsonResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)).items():
-			print("Image:", image + "\n" + "Source:", source + "\n")
+			if image != "total_pages":
+				print("Image:", str(image) + "\n" + "Source:", str(source) + "\n")
 	elif arguments['outputMode'] == 'cli':
 		printCliResults(results, int(arguments['resultsPerPage']), int(arguments['pageNumber']), creds)
 	elif arguments['outputMode'] == 'json':
