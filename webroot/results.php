@@ -53,7 +53,7 @@ function printSite($searchString, $creds) {
 	echo "			</div>\n";
 	echo "		</header>\n";
 	// Start of results
-	printResults($searchString);
+	printResults($searchString, 'image');
 	echo "		<footer>\n";
 	echo "			<p><a href='https://github.com/joshuadeal/search-sasquatch'>GitHub</a></p>\n";
 	echo "			<form action='results.php' method='get'>\n";
@@ -77,9 +77,13 @@ function printResults($searchString) {
 	$currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
 
 	// Preform the search.
-	if ($_GET['safe'] == 1) {
+	if ($_GET['safe'] == 1 and $_GET['mode'] == 'image') {
+		$cmd = "/opt/search-sasquatch/search.py -i -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+	} elseif ($_GET['safe'] == 0 and $_GET['mode'] == 'image') {
+		$cmd = "/opt/search-sasquatch/search.py -i -n -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+	} elseif ($_GET['safe'] == 1) {
 		$cmd = "/opt/search-sasquatch/search.py -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
-	} elseif ($_GET['safe'] == 0) {
+	} else if ($_GET['safe'] == 0){
 		$cmd = "/opt/search-sasquatch/search.py -n -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
 	}
 
@@ -88,7 +92,7 @@ function printResults($searchString) {
 	// Decode the json output.
 	$data = json_decode($output, true);
 
-	// Make sure we have the results key
+	// Make sure we have the results key (web search mode)
 	if (isset($data['results'])) {
 		// Loop through the results and create HTML code for displaying the output
 		foreach ($data['results'] as $result) {
@@ -99,6 +103,46 @@ function printResults($searchString) {
 			echo "	<p>Score: " . $result['score'] . "</p>\n";
 			echo "</div>\n";
 		}
+
+		// Print pagination links.
+		echo "<div id='pagination'>\n";
+		if ($currentPage > 1) {
+			echo "<a href='?q=$searchString&page=" . 1 . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button><<</button></a> ";
+			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>Previous</button></a> ";
+		}
+		if ($data['total_pages'] < 10) {
+			for ($i = 1; $i <= $data['total_pages']; $i++) {
+				if ($i != $currentPage) {
+					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>$i</button></a> ";
+				} else {
+					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button id='current-page'>$i</button></a> ";
+				}
+			}
+		} else {
+			for ($i = ($currentPage - 4); $i <= $currentPage + 4; $i++) {
+				if($i > 0 && $i <= $data['total_pages']) {
+					if ($i != $currentPage) {
+						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>$i</button></a> ";
+					} else {
+						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button id='current-page'>$i</button></a> ";
+					}
+				}
+			}
+		}
+		if ($currentPage < $data['total_pages']) {
+			echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>Next</button></a>";
+			echo "<a href='?q=$searchString&page=" . $data['total_pages'] . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>>></button></a> ";
+		}
+		echo "</div>\n";
+	// Output image results if in image mode.
+	} elseif ($_GET['mode'] == 'image' and $data) {
+		echo "<div id='result' style='text-align: center;'>\n";
+
+		foreach ($data as $imageUrl => $sourceUrl){
+			echo "<a href='$sourceUrl'><img src='$imageUrl' loading='lazy' style='max-height: 400px; max-width: 400px; min-height: 100px; min-width: 100px;'></a>\n";
+		}
+
+		echo "</div>\n";
 
 		// Print pagination links.
 		echo "<div id='pagination'>\n";
