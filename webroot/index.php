@@ -37,10 +37,20 @@
 						<label for='on'>On</label>
 						<input type="radio" name="safe" id='off' value='0'>
 						<label for='off'>Off</label>
+					</div>
+					<div id='search-mode'>
+						<label for='web-search'>
+							<input type ='radio' name='mode' id='web-search' value='web' checked='checked'>
+							Web Search
+						</label>
+						<label for='image-search'>
+							<input type ='radio' name='mode' id='image-search' value='image'>
+							Image Search
+						</label>
+					</div>
 						<?php
 							echo "<input type='hidden' name='style' value='" . $_GET['style'] . "'>\n";
 						?>
-					</div>
 				</form>	
 			</div>
 		</header>
