@@ -51,22 +51,22 @@ function printSite($searchString, $creds) {
 	// Remeber if we are in web or image mode.
 	if ($_GET['mode'] != "image") {
 		echo "						<label for='web-search'>\n";
-		echo "							<input type ='radio' name='mode' id='web-search' value='web' checked='checked'>";
+		echo "							<input type ='radio' name='mode' id='web-search' value='web' checked='checked'>\n";
 		echo "							Web Search\n";
-		echo "							</label>";
+		echo "							</label>\n";
 		echo "						<label for='image-search'>\n";
-		echo "							<input type ='radio' name='mode' id='image-search' value='image'>";
+		echo "							<input type ='radio' name='mode' id='image-search' value='image'>\n";
 		echo "							Image Search\n";
-		echo "							</label>";
+		echo "							</label>\n";
 	} elseif ($_GET['mode'] == "image") {
 		echo "						<label for='web-search'>\n";
-		echo "							<input type ='radio' name='mode' id='web-search' value='web'>";
+		echo "							<input type ='radio' name='mode' id='web-search' value='web'>\n";
 		echo "							Web Search\n";
-		echo "							</label>";
+		echo "							</label>\n";
 		echo "						<label for='image-search'>\n";
-		echo "							<input type ='radio' name='mode' id='image-search' value='image' checked='checked'>";
+		echo "							<input type ='radio' name='mode' id='image-search' value='image' checked='checked'>\n";
 		echo "							Image Search\n";
-		echo "							</label>";
+		echo "							</label>\n";
 	}
 	echo "					</div>\n";
 	// Remeber the style sheet.
