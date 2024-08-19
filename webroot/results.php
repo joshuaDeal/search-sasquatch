@@ -27,33 +27,55 @@ function printSite($searchString, $creds) {
 	echo " ___) |  __/ (_| | | | (__| | | |  ___) | (_| \__ \ (_| | |_| | (_| | || (__| | | |\n";
 	echo "|____/ \___|\__,_|_|  \___|_| |_| |____/ \__,_|___/\__, |\__,_|\__,_|\__\___|_| |_|\n";
 	echo "                                                      |_|                          \n";
-	echo "			</pre>";
+	echo "			</pre>\n";
 	echo "			<div>\n";
 	echo "				<form id=\"form\" action=\"./results.php\" method=\"get\">\n";
 	echo "					<input type=\"search\" name=\"q\" value='$searchString'>\n";
 	echo "					<button>Search</button>\n";
-	echo "					<div id='safe-search'>";
-	echo "						<label for='safe-search'>Safe Search</label>";
+	echo "					<div id='safe-search'>\n";
+	echo "						<label for='safe-search'>Safe Search</label>\n";
 	// Remeber if safe search was enabled or disabled.
 	if ($_GET['safe'] == 1) {
-		echo "						<input type='radio' name='safe' id='on' value='1' checked='checked'>";
-		echo "						<label for='on'>On</label>";
-		echo "						<input type='radio' name='safe' id='off' value='0'>";
-		echo "						<label for='off'>Off</label>";
+		echo "						<input type='radio' name='safe' id='on' value='1' checked='checked'>\n";
+		echo "						<label for='on'>On</label>\n";
+		echo "						<input type='radio' name='safe' id='off' value='0'>\n";
+		echo "						<label for='off'>Off</label>\n";
 	} else {
-		echo "						<input type='radio' name='safe' id='on' value='1'>";
-		echo "						<label for='on'>On</label>";
-		echo "						<input type='radio' name='safe' id='off' value='0' checked='checked'>";
-		echo "						<label for='off'>Off</label>";
+		echo "						<input type='radio' name='safe' id='on' value='1'>\n";
+		echo "						<label for='on'>On</label>\n";
+		echo "						<input type='radio' name='safe' id='off' value='0' checked='checked'>\n";
+		echo "						<label for='off'>Off</label>\n";
 	}
-	echo "					</div>";
+	echo "					</div>\n";
+	echo "					<div id='search-mode'>\n";
+	// Remeber if we are in web or image mode.
+	if ($_GET['mode'] != "image") {
+		echo "						<label for='web-search'>\n";
+		echo "							<input type ='radio' name='mode' id='web-search' value='web' checked='checked'>";
+		echo "							Web Search\n";
+		echo "							</label>";
+		echo "						<label for='image-search'>\n";
+		echo "							<input type ='radio' name='mode' id='image-search' value='image'>";
+		echo "							Image Search\n";
+		echo "							</label>";
+	} elseif ($_GET['mode'] == "image") {
+		echo "						<label for='web-search'>\n";
+		echo "							<input type ='radio' name='mode' id='web-search' value='web'>";
+		echo "							Web Search\n";
+		echo "							</label>";
+		echo "						<label for='image-search'>\n";
+		echo "							<input type ='radio' name='mode' id='image-search' value='image' checked='checked'>";
+		echo "							Image Search\n";
+		echo "							</label>";
+	}
+	echo "					</div>\n";
 	// Remeber the style sheet.
-	echo "							<input type='hidden' name='style' value='" . $_GET['style'] . "'>";
+	echo "							<input type='hidden' name='style' value='" . $_GET['style'] . "'>\n";
 	echo "				</form>\n";
 	echo "			</div>\n";
 	echo "		</header>\n";
 	// Start of results
-	printResults($searchString, 'image');
+	printResults($searchString);
 	echo "		<footer>\n";
 	echo "			<p><a href='https://github.com/joshuadeal/search-sasquatch'>GitHub</a></p>\n";
 	echo "			<form action='results.php' method='get'>\n";
@@ -107,31 +129,31 @@ function printResults($searchString) {
 		// Print pagination links.
 		echo "<div id='pagination'>\n";
 		if ($currentPage > 1) {
-			echo "<a href='?q=$searchString&page=" . 1 . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button><<</button></a> ";
-			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>Previous</button></a> ";
+			echo "<a href='?q=$searchString&page=" . 1 . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button><<</button></a> ";
+			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Previous</button></a> ";
 		}
 		if ($data['total_pages'] < 10) {
 			for ($i = 1; $i <= $data['total_pages']; $i++) {
 				if ($i != $currentPage) {
-					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>$i</button></a> ";
+					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>$i</button></a> ";
 				} else {
-					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button id='current-page'>$i</button></a> ";
+					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button id='current-page'>$i</button></a> ";
 				}
 			}
 		} else {
 			for ($i = ($currentPage - 4); $i <= $currentPage + 4; $i++) {
 				if($i > 0 && $i <= $data['total_pages']) {
 					if ($i != $currentPage) {
-						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>$i</button></a> ";
+						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>$i</button></a> ";
 					} else {
-						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button id='current-page'>$i</button></a> ";
+						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button id='current-page'>$i</button></a> ";
 					}
 				}
 			}
 		}
 		if ($currentPage < $data['total_pages']) {
-			echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>Next</button></a>";
-			echo "<a href='?q=$searchString&page=" . $data['total_pages'] . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>>></button></a> ";
+			echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Next</button></a>";
+			echo "<a href='?q=$searchString&page=" . $data['total_pages'] . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>>></button></a> ";
 		}
 		echo "</div>\n";
 	// Output image results if in image mode.
@@ -140,7 +162,7 @@ function printResults($searchString) {
 
 		foreach ($data as $imageUrl => $sourceUrl){
 			if ($imageUrl != "total_pages") {
-				echo "<a href='$sourceUrl'><img src='$imageUrl' loading='lazy' style='max-height: 400px; max-width: 400px; min-height: 100px; min-width: 100px;'></a>\n";
+				echo "	<a href='$sourceUrl'><img src='$imageUrl' loading='lazy' style='max-height: 400px; max-width: 400px; min-height: 100px; min-width: 100px;'></a>\n";
 			}
 		}
 
@@ -149,31 +171,31 @@ function printResults($searchString) {
 		// Print pagination links.
 		echo "<div id='pagination'>\n";
 		if ($currentPage > 1) {
-			echo "<a href='?q=$searchString&page=" . 1 . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button><<</button></a> ";
-			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>Previous</button></a> ";
+			echo "<a href='?q=$searchString&page=" . 1 . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button><<</button></a> ";
+			echo "<a href='?q=$searchString&page=" . ($currentPage - 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Previous</button></a> ";
 		}
 		if ($data['total_pages'] < 10) {
 			for ($i = 1; $i <= $data['total_pages']; $i++) {
 				if ($i != $currentPage) {
-					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>$i</button></a> ";
+					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>$i</button></a> ";
 				} else {
-					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button id='current-page'>$i</button></a> ";
+					echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button id='current-page'>$i</button></a> ";
 				}
 			}
 		} else {
 			for ($i = ($currentPage - 4); $i <= $currentPage + 4; $i++) {
 				if($i > 0 && $i <= $data['total_pages']) {
 					if ($i != $currentPage) {
-						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>$i</button></a> ";
+						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>$i</button></a> ";
 					} else {
-						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button id='current-page'>$i</button></a> ";
+						echo "<a href='?q=$searchString&page=$i&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button id='current-page'>$i</button></a> ";
 					}
 				}
 			}
 		}
 		if ($currentPage < $data['total_pages']) {
-			echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>Next</button></a>";
-			echo "<a href='?q=$searchString&page=" . $data['total_pages'] . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "'><button>>></button></a> ";
+			echo "<a href='?q=$searchString&page=" . ($currentPage + 1) . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>Next</button></a>";
+			echo "<a href='?q=$searchString&page=" . $data['total_pages'] . "&safe=" . $_GET['safe'] . "&style=" . $_GET['style'] . "&mode=" . $_GET['mode'] . "'><button>>></button></a> ";
 		}
 		echo "</div>\n";
 	} else {
