@@ -139,7 +139,9 @@ function printResults($searchString) {
 		echo "<div id='result' style='text-align: center;'>\n";
 
 		foreach ($data as $imageUrl => $sourceUrl){
-			echo "<a href='$sourceUrl'><img src='$imageUrl' loading='lazy' style='max-height: 400px; max-width: 400px; min-height: 100px; min-width: 100px;'></a>\n";
+			if ($imageUrl != "total_pages") {
+				echo "<a href='$sourceUrl'><img src='$imageUrl' loading='lazy' style='max-height: 400px; max-width: 400px; min-height: 100px; min-width: 100px;'></a>\n";
+			}
 		}
 
 		echo "</div>\n";
