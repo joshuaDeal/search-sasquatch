@@ -88,8 +88,7 @@ def performSearch(searchString, safe, creds):
 
 	# Tokenize the search string.
 	pattern = r'[^a-zA-Z0-9\s]'
-	cleanString = re.sub(pattern, ' ', searchString)
-	cleanList = cleanString.lower().split()
+	cleanList = re.sub(pattern, ' ', searchString).lower().split()
 	searchTokens = [' ' + token + ' ' for token in cleanList]
 
 	# Calculate the Term Frequency (TF) for each token.
