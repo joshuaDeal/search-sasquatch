@@ -140,7 +140,10 @@ def performSearch(searchString, safe, creds):
 				idfValue = idf[token]
 
 				# Calculate TF-IDF score.
-				tfidfScore += tf * math.log((num_rows + 1) / idfValue)
+				if idfValue > 0:
+					tfidfScore += tf * math.log((num_rows + 1) / idfValue)
+				else:
+					pass
 
 				# Give extra points if the token appears in the title.
 				if token in title:
