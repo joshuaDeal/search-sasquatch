@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urljoin
 from extractor import getMySqlCreds
+from collections import Counter
 
 # Print a helpful message.
 def printHelp():
@@ -65,17 +66,6 @@ def evalArguments():
 			output['imageMode'] = True
 	return output
 
-# Count how many times a item appears in an array.
-def listCountValues(input):
-	valueCounts = {}
-
-	for value in input:
-		currentCount = valueCounts.get(value, 0)
-
-		valueCounts[value] = currentCount + 1
-
-	return valueCounts
-
 # Takes a search string as input. Returns an array of result id numbers.
 def performSearch(searchString, safe, creds):
 	TITLE_POINTS = 6
@@ -92,7 +82,7 @@ def performSearch(searchString, safe, creds):
 	searchTokens = [' ' + token + ' ' for token in cleanList]
 
 	# Calculate the Term Frequency (TF) for each token.
-	searchTermFrequency = listCountValues(searchTokens)
+	searchTermFrequency = Counter(searchTokens)
 
 	# Connect to database
 	try:
