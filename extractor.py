@@ -27,7 +27,7 @@ def evalArguments():
 		# Print help message.
 		if sys.argv[i] == "--help" or sys.argv[i] == "-h":
 			printHelp()
-			sys.exit
+			sys.exit()
 		# Let user specify key file for database login.
 		elif sys.argv[i] == "--key" or sys.argv[i] == "-k":
 			output['keyFile'] = sys.argv[i+1]
