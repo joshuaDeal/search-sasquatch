@@ -232,6 +232,11 @@ def getJsonResults(results, resultsPerPage, page, creds):
 		cursor = conn.cursor()
 
 		total_results = len(results)
+
+		# Assume user wants all results on one page when resultsPerPage is 0. 
+		if (resultsPerPage == 0):
+			resultsPerPage = len(results)
+
 		total_pages = math.ceil(total_results / resultsPerPage)
 
 		output_data = {"total_results": total_results, "total_pages": total_pages, "results": []}
