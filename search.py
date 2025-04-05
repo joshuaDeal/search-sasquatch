@@ -192,6 +192,11 @@ def printCliResults(results, resultsPerPage, page, creds):
 	end_index = page * resultsPerPage if resultsPerPage > 0 else len(results)
 
 	print("Total results:", len(results))
+
+	# Assume user wants all results on one page when resultsPerPage is 0. 
+	if (resultsPerPage == 0):
+		resultsPerPage = len(results)
+
 	print("Pages:", math.ceil(len(results) / resultsPerPage))
 	print()
 
