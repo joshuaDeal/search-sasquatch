@@ -2,7 +2,7 @@
 An internet search engine written mostly in python. Currently TF-IDF based.
 
 # Acknowledgments / Attributions
-It should be noted that the file `naughty-words.txt` is sourced from an [external project](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words) and is licensed under the terms of the [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/). This is unlike the rest of this project, which is licensed under the terms of [GNU General Public License V3.0](https://www.gnu.org/licenses/gpl-3.0.html#license-text).
+It should be noted that the file `naughty-words.txt` is sourced from Coffee and Fun's [google-profanity-words](https://github.com/coffee-and-fun/google-profanity-words).
 
 ## init.sh
 Preforms initial tasks for setting up an instance. Use the `--user` option to specify a privileged MariaDB/MySQL user.
