@@ -1,2 +1,4 @@
 raw-urls.txt
 __pycache__/
+db_creds.gpg
+decryption_key.txt
