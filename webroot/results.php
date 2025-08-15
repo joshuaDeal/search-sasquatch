@@ -1,4 +1,11 @@
 <?php
+// Start session.
+session_start();
+
+// Initialize the resultCache.
+if (!isset($_SESSION['resultCache'])) {
+	$_SESSION['resultCache'] = [];
+}
 
 // Outputs html for webpage.
 function printSite($searchString, $creds) {
@@ -98,21 +105,33 @@ function printResults($searchString) {
 	$resultsPerPage = 20;
 	$currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
 
-	// Preform the search.
-	if ($_GET['safe'] == 1 and $_GET['mode'] == 'image') {
-		$cmd = "/opt/search-sasquatch/search.py -i -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
-	} elseif ($_GET['safe'] == 0 and $_GET['mode'] == 'image') {
-		$cmd = "/opt/search-sasquatch/search.py -i -n -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
-	} elseif ($_GET['safe'] == 1) {
-		$cmd = "/opt/search-sasquatch/search.py -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
-	} else if ($_GET['safe'] == 0){
-		$cmd = "/opt/search-sasquatch/search.py -n -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+	// Check cache for current search.
+	if (isset($_SESSION['resultCache'][$searchString][$_GET['safe']][$_GET['mode']])) {
+		echo "This search is cached!";
+		$data = $_SESSION['resultCache'][$searchString][$_GET['safe']][$_GET['mode']];
+	} else {
+		echo "This search is not cached!";
+
+		// Preform the search.
+		if ($_GET['safe'] == 1 and $_GET['mode'] == 'image') {
+			$cmd = "/opt/search-sasquatch/search.py -i -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+		} elseif ($_GET['safe'] == 0 and $_GET['mode'] == 'image') {
+			$cmd = "/opt/search-sasquatch/search.py -i -n -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+		} elseif ($_GET['safe'] == 1) {
+			$cmd = "/opt/search-sasquatch/search.py -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+		} else if ($_GET['safe'] == 0){
+			$cmd = "/opt/search-sasquatch/search.py -n -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+		}
+	
+		$output = shell_exec($cmd);
+	
+		// Decode the json output.
+		$data = json_decode($output, true);
+
+		// Cache result.
+		$_SESSION['resultCache'][$searchString][$_GET['safe']][$_GET['mode']] = $data;
 	}
 
-	$output = shell_exec($cmd);
-
-	// Decode the json output.
-	$data = json_decode($output, true);
 
 	// Make sure we have the results key (web search mode)
 	if (isset($data['results'])) {
