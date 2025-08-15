@@ -7,6 +7,11 @@ if (!isset($_SESSION['resultCache'])) {
 	$_SESSION['resultCache'] = [];
 }
 
+// Limit size of resultCache.
+if (count($_SESSION['resultCache']) > 5) {
+	array_shift($_SESSION['resultCache']);
+}
+
 // Outputs html for webpage.
 function printSite($searchString, $creds) {
 	echo "<!DOCTYPE html>\n";
