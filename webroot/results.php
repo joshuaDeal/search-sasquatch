@@ -130,8 +130,10 @@ function printResults($searchString) {
 		// Decode the json output.
 		$data = json_decode($output, true);
 
-		// Cache result.
-		$_SESSION['resultCache'][$searchString][$_GET['safe']][$_GET['mode']] = $data;
+		// Cache result. Only do this for text searches and not images searches.
+		if ($_GET['mode'] != 'image') {
+			$_SESSION['resultCache'][$searchString][$_GET['safe']][$_GET['mode']] = $data;
+		}
 	}
 
 
