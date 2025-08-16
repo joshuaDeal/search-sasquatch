@@ -116,9 +116,9 @@ function printResults($searchString) {
 	} else {
 		// Preform the search.
 		if ($_GET['safe'] == 1 and $_GET['mode'] == 'image') {
-			$cmd = "/opt/search-sasquatch/search.py -i -s '$searchString' -o 'json' -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+			$cmd = "/opt/search-sasquatch/search.py -i -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
 		} elseif ($_GET['safe'] == 0 and $_GET['mode'] == 'image') {
-			$cmd = "/opt/search-sasquatch/search.py -i -n -s '$searchString' -o 'json' -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
+			$cmd = "/opt/search-sasquatch/search.py -i -n -s '$searchString' -o 'json' -r $resultsPerPage -p $currentPage -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
 		} elseif ($_GET['safe'] == 1) {
 			$cmd = "/opt/search-sasquatch/search.py -s '$searchString' -o 'json' -c /opt/search-sasquatch/db_creds.gpg -k /opt/search-sasquatch/decryption_key.txt";
 		} else if ($_GET['safe'] == 0){
@@ -164,31 +164,15 @@ function printResults($searchString) {
 	} elseif ($_GET['mode'] == 'image' and $data) {
 		echo "<div id='result' style='text-align: center;'>\n";
 
-
-		$resultsPerPage = 50;
-		$currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		
-		// Remove any metadata keys like 'total_pages'
-		$imageResults = array_filter($data, function($key) {
-			return $key !== 'total_pages';
-		}, ARRAY_FILTER_USE_KEY);
-		
-		$totalResults = count($imageResults);
-		$totalPages = ceil($totalResults / $resultsPerPage);
-		
-		// Slice for pagination
-		$start = ($currentPage - 1) * $resultsPerPage;
-		$pagedImages = array_slice($imageResults, $start, $resultsPerPage, true);
-		
-		// Display images
-		echo "<div id='result' style='text-align: center;'>\n";
-		foreach ($pagedImages as $imageUrl => $sourceUrl){
-			echo "  <a href='$sourceUrl'><img src='$imageUrl' loading='lazy' style='max-height: 400px; max-width: 400px; min-height: 100px; min-width: 100px;'></a>\n";
+		foreach ($data as $imageUrl => $sourceUrl){
+			if ($imageUrl != "total_pages") {
+				echo "	<a href='$sourceUrl'><img src='$imageUrl' loading='lazy' style='max-height: 400px; max-width: 400px; min-height: 100px; min-width: 100px;'></a>\n";
+			}
 		}
+
 		echo "</div>\n";
-		
-		// Add total_pages to data for pagination
-		$data['total_pages'] = $totalPages;
+
+		// Print pagination links.	
 		printPages($currentPage, $searchString, $data);
 	} else {
 		echo "No results found\n";
